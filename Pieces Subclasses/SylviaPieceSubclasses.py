@@ -1,0 +1,1 @@
+# Subclasses Pawn, Rook Knight
