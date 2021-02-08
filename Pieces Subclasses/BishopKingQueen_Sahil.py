@@ -1,7 +1,8 @@
+#Author: Sahil Agrawal
 
+from Piece import Piece
 
-
-class King(Class):
+class King(Piece):
 
     def calcPossibleSquares(self):
         #this is the possible coordinates for the piece
@@ -36,10 +37,18 @@ class King(Class):
         
         #Any other filters before returning?
 
+    #removes spots that are off the board
 
     def removeOffBoardSpots(self):
-        
+        for pt in self.possibleSpots:
+            if pt[0] >7 or pt[0] <1 or pt[1] >7 or pt[1] <1:
+                pt.remove #need correct notation
 
+
+
+
+#for moving it, we need to check if the square the user clicked in was in list self.possibleSquares
+#if it isn't, then we need to figure out if the user clicked on 
 
 class Bishop(Class):
 
