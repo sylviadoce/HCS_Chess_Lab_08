@@ -12,9 +12,9 @@ class Square(Button):
         p2=Point(self.xmax, self.ymax)
         self.rect=Rectangle(p1,p2)
         if (center.getX()+center.getY())%2 == 0:
-            self.color = "gray"
-        else:
             self.color = "white"
+        else:
+            self.color = "gray"
         self.rect.setFill(self.color)
         self.rect.draw(win)
         self.center = center
