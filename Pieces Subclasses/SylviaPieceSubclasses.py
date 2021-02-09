@@ -36,7 +36,7 @@ class Piece:
         return self.eaten
 
 class Pawn(Piece):
-    """Subclass of piece class for pawns."""
+    """Subclass of the Piece Class for pawns."""
     # Same init as superclass
     # Define the pawn's moves
     def movePiece(self) -> list:
@@ -44,7 +44,7 @@ class Pawn(Piece):
         return self.position[1] += 1
 
 class Rook(Piece):
-    """Subclass of piece class for rooks."""
+    """Subclass of the Piece Class for rooks."""
     # Same init as superclass
 
 class Knight(Piece):
