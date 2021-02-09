@@ -17,8 +17,8 @@ class BoardGUI:
         self.origin.draw(self.win)
 
         # Create a message label, box, and text
-        self.message_label = Text(Point(-5,9),"Messages")
-        self.message_label.setSize(15)
+        self.message_label = Text(Point(-5,9),"MESSAGES")
+        self.message_label.setSize(14)
         self.message_label.draw(self.win)
         self.message_box = Rectangle(Point(-7.25,5.5),
                                      Point(-2.75,8.5)).draw(self.win)
@@ -28,7 +28,8 @@ class BoardGUI:
 
         # Create a quit button from the Button Class
         self.quit_button = Button(self.win,Point(-5,0),
-                                  2,0.8,"Quit")
+                                  2,0.8,"QUIT")
+        self.quit_button.activate()
 
         # List to store all squares
         self.squares = []
@@ -55,6 +56,7 @@ class BoardGUI:
             point = Point(x,y)
             Text(point,num).draw(self.win)
             y += 1
+
 
 ###### END OF CLASS ######
 def main():
