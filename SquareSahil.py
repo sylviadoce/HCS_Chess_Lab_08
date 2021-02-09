@@ -18,6 +18,8 @@ class Square(Button):
         self.rect.setFill(self.color)
         self.rect.draw(win)
         self.center = center
+        self.active = False
+        self.occupied = False
         #self.label=Text(center,label)
         #self.label.draw(win)
         #self.deactivate()
@@ -44,21 +46,23 @@ class Square(Button):
         if (self.xmin <= pt.getX() <= self.xmax and
                 self.ymin <= pt.getY() <= self.ymax):
             if self.active == True and self.occupied == False:
-                print("valid move")
+                return ("valid move")
                 #valid move
             elif self.active == False and self.occupied == True:
-                print("There is a piece on this square")
-                #find out who is occupying the square
+                return ("There is a piece on this square")
+                
+                #TODO: find out who is occupying the square
+                
                 #If an enemy piece in the range of the piece, then it is valid
                 #Else, not valid
             else:
-                print("3")
+                return("3")
                 #This shouldn't happen, but we can use this for testing
                 
         
 
     #If a piece is on the square
-    def occupied(self):
+    def setOccupied(self):
         self.occupied = True
 
     #If a piece is not on the square
@@ -80,9 +84,9 @@ class Square(Button):
 def main():
     win=GraphWin("Hi",800,600)
     sq = Square(win,Point(50,50),20,20)
-    pt = win.getMouse()
     sq.activate()
-    pt = win.getMouse()
+    c = sq.clicked(Point(50,50))
+    print(c)
     '''
     sq.deactivate()
     pt=win.getMouse()
@@ -90,7 +94,6 @@ def main():
     point = Point(50,50)
     sq.clicked(pt)
     '''
-    sq.resetOccupiedSquare()
 
 main()
 
