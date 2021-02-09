@@ -3,7 +3,7 @@
 # Import the superclass Button subclass Square class
 ##from Square import Square
 from Button import *
-from SquareSahil import *
+from Square import *
 from graphics import *
 
 class BoardGUI:
