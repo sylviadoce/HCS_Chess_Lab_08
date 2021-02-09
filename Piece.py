@@ -5,13 +5,14 @@ class Piece:
         self.eaten = False
         self.location = location
 
-    def getPossibleMoves(self,myTeam,enemyTeam):
+    def getPossibleMoves(self,myKing,myTeam,enemyTeam):
         self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
-        self.spots = self.avoidOwnCheck(myTeam, enemyTeam)
+        self.spots = self.removeOffBoardSpots()
+        self.spots = self.avoidOwnCheck(myKing,myTeam, enemyTeam)
         return self.spots
         
     def movePiece(self,pt):
-        valid = self.checkValidMove(
+        valid = self.checkValidMove(pt)
         if valid:
             self.location = Point(x,y)
             return True
@@ -31,12 +32,25 @@ class Piece:
 
     def isEaten(self):
         self.eaten = True
-
-    #remove a spot from self.spots if moving there puts our own king in check.
+        
     #to do: confirm that this is required by assignment
-    def avoidOwnCheck(self, myKing, enemyTeam):
+    #for pieces - allows them to only make moves that prevent the king from going into check
+    #for king - prevents him from going to squares that put himself in check.
+    def avoidOwnCheck(self, myKing,myTeam,enemyTeam):
         kingX, kingY = myKing.getPosition()
+        myTeam.append(self) #How to make a list append the object that it is in?
         for spot in self.spots:
+            self.currentLocation = self.location
+            self.location = spot
+            for piece in enemyTeam:
+                possibleSpots = piece.getPossibleMoves(enemyTeam,myTeam)
+                if myKing.getPosition() in possibleSpots:
+                    spot.remove(self.spots) #find correct notation
+                    
             #check that if the piece's location is at one of these spots, does myKing become in check?
-            if myKingCheck:
-                self.spots.remove(spot)
+
+    def removeOffBoardSpots(self):
+            for pt in self.possibleSpots:
+                if pt[0] >7 or pt[0] <1 or pt[1] >7 or pt[1] <1:
+                    pt.remove
+    
