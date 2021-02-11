@@ -1,12 +1,19 @@
-# This is the Board GUI that manages all things interface.
+# Sylvia Chin
+#
+# This is the Board GUI that manages all things interface, including all
+# board square, piece image, message, and quit capabilities.
 #
 # Import the superclass Button subclass Square class
+from graphics import *
 from Button import *
 from Square import *
-from graphics import *
+from Piece import *
 
 class BoardGUI:
     def __init__(self):
+        # Access the Piece Class variables
+        self.piece = Piece()
+        
         # Create a graphics window called "Chess", 900x600
         self.win = GraphWin("Chess",900,600)
         # Set coordinates so each square move is 1
@@ -26,7 +33,7 @@ class BoardGUI:
         self.message.setSize(18)
         self.message.draw(self.win)     
 
-        # Create a quit button from the Button Class
+        # Create and activate a quit button from the Button Class
         self.quit_button = Button(self.win,Point(-5,0),
                                   2,0.8,"QUIT")
         self.quit_button.activate()
@@ -45,18 +52,61 @@ class BoardGUI:
             x += 1
 
         # Create the alphabetic and numeric board labels
-        board_label = [["a","b","c","d","e","f","g","h"],[1,2,3,4,5,6,7,8]]
+        self.board_label = [["a","b","c","d","e","f","g","h"],
+                            [1,2,3,4,5,6,7,8]]
         x,y = 0.5,8.5
-        for alph in board_label[0]:
+        for alph in self.board_label[0]:
             point = Point(x,y)
             Text(point,alph).draw(self.win)
             x += 1
         x,y = 8.5,0.5
-        for num in board_label[1]:
+        for num in self.board_label[1]:
             point = Point(x,y)
             Text(point,num).draw(self.win)
             y += 1
 
+    def createPieces(self) -> list:
+        # This should return a list of lists each [piece, coord, color]
+
+    def createPawns(self):
+        # Create all white, black pawns in their standard locations
+        # Use the Piece class to draw an image for the image param
+        
+    def createBishops(self):
+        # Create all white, black bishops in their standard locations
+
+    def createKnights(self):
+        # Create all white, black knights in their standard locations
+
+    def createRooks(self):
+        # Create all white, black rooks in their standard locations
+
+    def createQueens(self):
+        # Create the white, black queen in her standard location
+
+    def createKings(self):
+        # Create the white, black king in his standard location
+
+    def locationCoordToLabel(self) -> str:
+        """Converts a piece's coordinate to its alphabetized and
+            numeric label."""
+        
+        loc_label = ""
+        coord = 0.5
+        # Associate the y/x coordinate with its respective letter/number
+        for y in range(8):
+            if self.piece[1][1] == coord:
+                loc_label += str(self.board_label[0][y])
+                break
+            coord += 1
+        coord = 0.5
+        for x in range(8):
+            if self.piece[1][0] == coord:
+                loc_label += str(self.board_label[1][x])
+                break
+            coord += 1
+
+        return loc_label
 
 ###### END OF CLASS ######
 def main():
