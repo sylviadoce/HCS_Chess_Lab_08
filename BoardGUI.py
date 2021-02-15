@@ -11,8 +11,8 @@ from Piece import *
 
 class BoardGUI:
     def __init__(self):
-        # Access the Piece Class variables
-        self.piece = Piece()
+##        # Access the Piece Class variables
+##        self.piece = Piece()
         
         # Create a graphics window called "Chess", 900x600
         self.win = GraphWin("Chess",900,600)
@@ -65,27 +65,62 @@ class BoardGUI:
             Text(point,num).draw(self.win)
             y += 1
 
-    def createPieces(self) -> list:
-        # This should return a list of lists each [piece, coord, color]
-
-    def createPawns(self):
-        # Create all white, black pawns in their standard locations
-        # Use the Piece class to draw an image for the image param
+    def createPawns(self) -> list:
+        """Creates all white, black pawns in their standard locations."""
+        # Stores a list of two lists, pawns in each color (white first)
+        pawns = []
         
-    def createBishops(self):
+        # Initialize the white (bottom-left) pawn coordinates (a2)
+        x,y = 1.5,0.5
+        for pawn in range(8):
+            # Make sure each pawn is created at the right coord!!!!!!!!
+            pawns.append(Pawn("INSERT PAWN PARAMS HERE"))
+
+        # Same for black, change x,y coords
+
+        return pawns
+        
+    def createBishops(self) -> list:
         # Create all white, black bishops in their standard locations
 
-    def createKnights(self):
+    def createKnights(self) -> list:
         # Create all white, black knights in their standard locations
 
-    def createRooks(self):
+    def createRooks(self) -> list:
         # Create all white, black rooks in their standard locations
 
-    def createQueens(self):
+    def createQueens(self) -> list:
         # Create the white, black queen in her standard location
 
-    def createKings(self):
+    def createKings(self) -> list:
         # Create the white, black king in his standard location
+
+    def createPieces(self) -> list:
+        # This should return a list of two lists of objects:
+        #   white pieces, black pieces (white is 0, black is 1)
+        # This should draw each piece in the window
+
+        # Create all pieces from their subclass
+        pawns = self.createPawns()
+        bishops = self.createBishops()
+        knights = self.createKnights()
+        rooks = self.createRooks()
+        queens = self.createQueens()
+        kings = self.createKings()
+
+        # Create a list of two lists storing all pieces
+        # First item contains white pieces, second contains black pieces
+        pieces = [[],[]]
+        for color in range(2):
+            for piece in [pawns,bishops,knights,rooks,queens,kings]:
+                pieces[color] += piece[color]
+
+        # Draw all pieces in the graphics window
+        for color in range(2):
+            for piece in pieces[color]:
+                piece.draw(self.win)
+
+        return pieces
 
     def locationCoordToLabel(self) -> str:
         """Converts a piece's coordinate to its alphabetized and
@@ -107,6 +142,7 @@ class BoardGUI:
             coord += 1
 
         return loc_label
+
 
 ###### END OF CLASS ######
 def main():
