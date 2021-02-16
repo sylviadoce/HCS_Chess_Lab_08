@@ -71,12 +71,15 @@ class BoardGUI:
         pawns = []
         
         # Initialize the white (bottom-left) pawn coordinates (a2)
-        x,y = 1.5,0.5
-        for pawn in range(8):
-            # Make sure each pawn is created at the right coord!!!!!!!!
-            pawns.append(Pawn("INSERT PAWN PARAMS HERE"))
+        x,y = 0.5,1.5
+        for i in range(8):
+            pawns.append(Pawn(Point(x,y),self.win,"white","pawn"))
+            x += 1
 
-        # Same for black, change x,y coords
+        # Initialize the black (top-left) pawn coordinates (a7)
+        x,y = 0.5,6.5
+        for i in range(8):
+            pawns.append(Pawn(Point(x,y),self.win,"black","pawn"))
 
         return pawns
         
@@ -115,10 +118,10 @@ class BoardGUI:
             for piece in [pawns,bishops,knights,rooks,queens,kings]:
                 pieces[color] += piece[color]
 
-        # Draw all pieces in the graphics window
-        for color in range(2):
-            for piece in pieces[color]:
-                piece.draw(self.win)
+##        # Draw all pieces in the graphics window
+##        for color in range(2):
+##            for piece in pieces[color]:
+##                piece.draw(self.win)
 
         return pieces
 

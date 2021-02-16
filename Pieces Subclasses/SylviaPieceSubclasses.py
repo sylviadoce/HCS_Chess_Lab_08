@@ -6,11 +6,11 @@ class Pawn(Piece):
     def calcListDirections(self) -> list:
         """Returns a list of all possible pawn moves: lists of what to add
             to the pawn's x,y location."""
-
+        numSpaces = 1
         # Includes the special eating diagonals and two-y beginning move
         listDir = [[1,1],[-1,1],[0,1],[0,2]]
 
-        return listDir
+        return listDir, numSpaces
 
 class Rook(Piece):
     """Subclass of the Piece Class for rooks."""
@@ -18,13 +18,15 @@ class Rook(Piece):
     def calcListDirections(self) -> list:
         """Returns a list of all possible rook moves: lists of what to add
             to the rook's x,y location."""
-        listDir = []
-        for i in range(8):
-            if i != 0:
-                listDir.append([0,i])
-                listDir.append([i,0])
+        numSpaces = 7
+        listDir = [[0,1],[1,0],[0,-1],[-1,0]]
+##        listDir = []
+##        for i in range(8):
+##            if i != 0:
+##                listDir.append([0,i])
+##                listDir.append([i,0])
 
-        return listDir
+        return listDir, numSpaces
     
 
 class Knight(Piece):
@@ -33,10 +35,11 @@ class Knight(Piece):
     def calcListDirections(self) -> list:
         """Returns a list of all possible rook moves: lists of what to add
             to the rook's x,y location."""
+        numSpaces = 1
         listDir = [[1,2],[-1,2],[1,-2],[-1,-2],
                    [2,1],[-2,1],[2,-1],[-2,-1]]
 
-        return listDir
+        return listDir, numSpaces
 
 class Queen(Piece):
     """Subclass of the Piece Class for rooks."""
@@ -44,51 +47,52 @@ class Queen(Piece):
     def calcListDirections(self) -> list:
         """Returns a list of all possible rook moves: lists of what to add
             to the queen's x,y location."""
+        numSpaces = 7
+        listDir = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
+##        listDir = []
+##        for i in range(8):
+##            if i != 7:
+##                listDir.append([i,i+1])
+##                listDir.append([i+1,i])
+##                listDir.append([i,-(i+1)])
+##                listDir.append([-(i+1),i])
+##            if i != 6 and i != 7:
+##                listDir.append([i,i+2])
+##                listDir.append([i+2,i])
+##                listDir.append([i,-(i+2)])
+##                listDir.append([-(i+2),i])
+##            if i != 5 and i != 6 and i != 7:
+##                listDir.append([i,i+3])
+##                listDir.append([i+3,i])
+##                listDir.append([i,-(i+3)])
+##                listDir.append([-(i+3),i])
+##            if i != 4 and i != 5 and i != 6 and i != 7:
+##                listDir.append([i,i+4])
+##                listDir.append([i+4,i])
+##                listDir.append([i,-(i+4)])
+##                listDir.append([-(i+4),i])
+##            if i != 3 and i != 4 and i != 5 and i != 6 and i != 7:
+##                listDir.append([i,i+5])
+##                listDir.append([i+5,i])
+##                listDir.append([i,-(i+5)])
+##                listDir.append([-(i+5),i])
+##            if (i != 2 and i != 3 and i != 4 and i != 5 and i != 6
+##                and i != 7):
+##                listDir.append([i,i+6])
+##                listDir.append([i+6,i])
+##                listDir.append([i,-(i+6)])
+##                listDir.append([-(i+6),i])
+##            if (i != 1 and i != 2 and i != 3 and i != 4 and i != 5
+##                and i != 6 and i != 7):
+##                listDir.append([i,i+7])
+##                listDir.append([i+7,i])
+##                listDir.append([i,-(i+7)])
+##                listDir.append([-(i+7),i])
+##            if i != 0:
+##                listDir.append([i,i])
+##                listDir.append([-i,-i])
 
-        listDir = []
-        for i in range(8):
-            if i != 7:
-                listDir.append([i,i+1])
-                listDir.append([i+1,i])
-                listDir.append([i,-(i+1)])
-                listDir.append([-(i+1),i])
-            if i != 6 and i != 7:
-                listDir.append([i,i+2])
-                listDir.append([i+2,i])
-                listDir.append([i,-(i+2)])
-                listDir.append([-(i+2),i])
-            if i != 5 and i != 6 and i != 7:
-                listDir.append([i,i+3])
-                listDir.append([i+3,i])
-                listDir.append([i,-(i+3)])
-                listDir.append([-(i+3),i])
-            if i != 4 and i != 5 and i != 6 and i != 7:
-                listDir.append([i,i+4])
-                listDir.append([i+4,i])
-                listDir.append([i,-(i+4)])
-                listDir.append([-(i+4),i])
-            if i != 3 and i != 4 and i != 5 and i != 6 and i != 7:
-                listDir.append([i,i+5])
-                listDir.append([i+5,i])
-                listDir.append([i,-(i+5)])
-                listDir.append([-(i+5),i])
-            if (i != 2 and i != 3 and i != 4 and i != 5 and i != 6
-                and i != 7):
-                listDir.append([i,i+6])
-                listDir.append([i+6,i])
-                listDir.append([i,-(i+6)])
-                listDir.append([-(i+6),i])
-            if (i != 1 and i != 2 and i != 3 and i != 4 and i != 5
-                and i != 6 and i != 7):
-                listDir.append([i,i+7])
-                listDir.append([i+7,i])
-                listDir.append([i,-(i+7)])
-                listDir.append([-(i+7),i])
-            if i != 0:
-                listDir.append([i,i])
-                listDir.append([-i,-i])
-
-        return listDir
+        return listDir, numSpaces
 
 
 ##class Piece:
