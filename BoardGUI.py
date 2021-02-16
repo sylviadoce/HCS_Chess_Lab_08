@@ -154,31 +154,31 @@ class BoardGUI:
 
         return kings
 
-    def createPieces(self) -> list:
-        """Return a list of two lists of created objects: white pieces and
-            black pieces (white is 0, black is 1)."""
-
-        # Create all pieces from their subclass
-        pawns = self.createPawns()
-        bishops = self.createBishops()
-        knights = self.createKnights()
-        rooks = self.createRooks()
-        queens = self.createQueens()
-        kings = self.createKings()
-
-        # Create a list of two lists storing all pieces
-        # First item contains white pieces, second contains black pieces
-        pieces = [[],[]]
-        for color in range(2):
-            for piece in [pawns,bishops,knights,rooks,queens,kings]:
-                pieces[color] += piece[color]
-
-##        # Draw all pieces in the graphics window
+##    def createPieces(self) -> list:
+##        """Return a list of two lists of created objects: white pieces and
+##            black pieces (white is 0, black is 1)."""
+##
+##        # Create all pieces from their subclass
+##        pawns = self.createPawns()
+##        bishops = self.createBishops()
+##        knights = self.createKnights()
+##        rooks = self.createRooks()
+##        queens = self.createQueens()
+##        kings = self.createKings()
+##
+##        # Create a list of two lists storing all pieces
+##        # First item contains white pieces, second contains black pieces
+##        pieces = [[],[]]
 ##        for color in range(2):
-##            for piece in pieces[color]:
-##                piece.draw(self.win)
-
-        return pieces
+##            for piece in [pawns,bishops,knights,rooks,queens,kings]:
+##                pieces[color] += piece[color]
+##
+####        # Draw all pieces in the graphics window
+####        for color in range(2):
+####            for piece in pieces[color]:
+####                piece.draw(self.win)
+##
+##        return pieces
 
     def locationCoordToLabel(self) -> str:
         """Converts a piece's coordinate to its alphabetized and
