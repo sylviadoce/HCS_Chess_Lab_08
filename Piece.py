@@ -17,7 +17,8 @@ class Piece:
 
     def getPossibleMoves(self,myKing,myTeam,enemyTeam):
         #create a list of all possible coordinates the piece can move
-        self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
+        self.possibleSpots(
+        #self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
         #remove spots that are off the board
         self.spots = self.removeOffBoardSpots()
         #removes spot that will put their own king in check
@@ -52,6 +53,8 @@ image.draw(win)
     #This will find the possible spots for all pieces. (except for diagonal pawn capture)
     #Ex: king's parameters would be: [[1,1],[1,0]....], 1, enemyTeam
         #knight: [[1,2],[2,1],etc.],1,enemyTeam
+#knight: 2,1],[1,2]
+rook: [0,1],08
     #First filter
     def possibleSpots(self,listDir,numSpaces,enemyTeam):
         self.spots = []
@@ -102,6 +105,8 @@ image.draw(win)
                 pt.remove
 
     def imageUpdate(self,location):
+        if self.eaten:
+            location = Point(200,200)
         self.image = Image(location,color+pieceType+".png")
         return self.image
 '"""""""'
@@ -127,3 +132,6 @@ image.draw(win)
 
     
 
+'"""""" accessors """""'
+def getEatean(self):
+    return self.eaten
