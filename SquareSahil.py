@@ -34,6 +34,7 @@ class Square(Button):
         self.rect.setWidth(2)
         self.active = True
 
+
     #call this after the move has ended, and when calculating the squares
         #Works
     def deactivate(self):
@@ -42,10 +43,12 @@ class Square(Button):
         self.active = False
 
     #Still needs work
+    '''    
     def clicked(self,pt):
         if (self.xmin <= pt.getX() <= self.xmax and
                 self.ymin <= pt.getY() <= self.ymax):
             if self.active == True and self.occupied == False:
+                return True
                 return ("valid move")
                 #valid move
             elif self.active == False and self.occupied == True:
@@ -59,7 +62,7 @@ class Square(Button):
                 return("3")
                 #This shouldn't happen, but we can use this for testing
                 
-        
+    '''    
 
     #If a piece is on the square
     def setOccupied(self):
@@ -72,29 +75,34 @@ class Square(Button):
         self.occupied = False
         self.rect.setFill(self.color)
         
+'''accessors'''
 
     def getLocation(self):
         #how de handle the coordinate grid?
         #We can convert everything to 0-7
         return self.center.getX(),self.center.getY()
 
+    def active(self):
+        return self.active
+
+
 
       
-
+'''Test
 def main():
     win=GraphWin("Hi",800,600)
     sq = Square(win,Point(50,50),20,20)
     sq.activate()
     c = sq.clicked(Point(50,50))
     print(c)
-    '''
+    
     sq.deactivate()
     pt=win.getMouse()
     
     point = Point(50,50)
     sq.clicked(pt)
-    '''
+    
 
 main()
-
+'''
 
