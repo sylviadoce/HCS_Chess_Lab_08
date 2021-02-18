@@ -32,18 +32,11 @@ class King(Piece):
             for piece in enemyPieces:
                 #same as above
 
-        #removes spots that are off the board
-        self.removeOffBoardSpots()
-        
-        #Any other filters before returning?
 
-    #removes spots that are off the board
-
-    def removeOffBoardSpots(self):
-        for pt in self.possibleSpots:
-            if pt[0] >7 or pt[0] <1 or pt[1] >7 or pt[1] <1:
-                pt.remove #need correct notation
-
+    
+        def __init()
+            super.init()
+            self.listDir = [[1,0]
 
 
 
