@@ -32,6 +32,7 @@ class ChessGame:
         x,y = 0.5,6.5
         for i in range(8):
             pawns[1].append(Pawn(Point(x,y),"black","pawn"))
+            x += 1
 
         return pawns
         
