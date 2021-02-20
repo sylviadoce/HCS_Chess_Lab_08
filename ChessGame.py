@@ -3,6 +3,8 @@
 # Chess Games module that runs the game - class??
 #
 from Piece import *
+from SylviaPieceSubclasses import *
+from BishopKingQueen_Sahil import *
 from BoardGUI import *
 
 def __init__(self):
@@ -93,10 +95,10 @@ def createKings(self) -> list:
     kings = [[],[]]
 
     # Initialize the white king coordinates (e1), create
-    kings[0] += King(Point(4.5,0.5),self.win,"white","king")
+    kings[0] += King(Point(4.5,0.5),"white","king")
 
     # Initialize the black king coordinates (e8), create
-    kings[1] += King(Point(4.5,7.5),self.win,"black","king")
+    kings[1] += King(Point(4.5,7.5),"black","king")
 
     return kings
 
@@ -114,4 +116,17 @@ def createPieces(self) -> list:
         for piece in [pawns,bishops,knights,rooks,queens,kings]:
             self.pieces[color] += piece[color]
 
+    # Draw each piece to the graphics window
+    for piece in self.pieces:
+        for p in piece:
+            board_gui.drawPiece(p)
+
+    self.whitepieces = self.pieces[0]
+    self.blackpieces = self.pieces[1]
+
     return self.pieces
+
+##def main(self):
+##    #call
+
+ChessGame.createPieces()

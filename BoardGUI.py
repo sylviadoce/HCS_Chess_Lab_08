@@ -7,7 +7,7 @@
 from graphics import *
 from Button import *
 from Square import *
-##from Piece import *
+from Piece import *
 
 class BoardGUI:
     def __init__(self,color):
@@ -116,6 +116,11 @@ class BoardGUI:
 
         return active
 
+    def drawPiece(self,piece):
+        """Draws the piece in the graphics window."""
+        
+        piece.imageUpdate().draw(self.win)
+
     def allClicks(self):
         """Handles all mouse clicks and carries out its respective
             action and/or message update. Returns the clicked item."""
@@ -125,20 +130,26 @@ class BoardGUI:
         # If the quit button is clicked, close the window
         if self.quit_button.clicked(pt) == True:
             self.win.close()
+            return "quit"
             
         # Check if a board square is clicked
         for sq in self.squares:
             # Identify the clicked square
-            if sq.clicked(pt) == True:
-                # If another square is activated, check valid move
-                if self.checkBoardStatus != 0:
-                    # this needs to move the piece
-                    # if capturing a piece, the other piece is undrawn
-                    # Change the turn color (after successful move)
-                    self.updateTurnColor()
-                    return "move sq"
-                else:
-                    return "wrong sq"
+            if sq.clicked(pt):
+                return sq
+
+        # return "empty"
+
+                
+##                # If another square is activated, check valid move
+##                if self.checkBoardStatus != 0:
+##                    # this needs to move the piece
+##                    # if capturing a piece, the other piece is undrawn
+##                    # Change the turn color (after successful move)
+##                    self.updateTurnColor()
+##                    return "move sq"
+##                else:
+##                    return "wrong sq"
                 
 ## PUT IN CHESSGAME
 ##                # Check if the clicked square is occupied by a piece
@@ -156,12 +167,11 @@ class BoardGUI:
 ##                                "Please click on a",self.color,"piece")
 ##                            return "wrong sq"
 
-        return "quit"
+    
 
 ###### END OF CLASS ######
 def main():
     board = BoardGUI("white")
-    board.allClicks()
 
 #TO-DOs:
 #   1. Keep track of which color team's turn it is
