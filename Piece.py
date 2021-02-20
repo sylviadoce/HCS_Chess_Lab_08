@@ -3,7 +3,7 @@ from graphics import *
 
 class Piece:
     #works
-    def __init__(self,location,win,color,pieceType):
+    def __init__(self,location,color,pieceType):
         #pieceType --> rook,bishop, pawn, etc.
         #Another way to implement this?
         self.eaten = False
@@ -120,7 +120,8 @@ class Piece:
         for spot in self.spots:
             self.location = spot
             for piece in enemyTeam:
-                possibleSpots = piece.getPossibleMoves(enemyKing,myTeam,enemyTeam,piece.calcListDirections(),piece.getNumSpaces())
+                listDir,numSpaces = piece.calcListDirections()
+                possibleSpots = piece.getPossibleMoves(enemyKing,myTeam,enemyTeam,listDir,numSpaces)
                 if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
                     #This checks if the the king is in check without moving any of the pieces.
                     spot.remove(self.spots) #find correct notation
