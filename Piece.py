@@ -2,6 +2,7 @@
 from graphics import *
 
 class Piece:
+    #works
     def __init__(self,location,win,color,pieceType):
         #pieceType --> rook,bishop, pawn, etc.
         #Another way to implement this?
@@ -9,16 +10,17 @@ class Piece:
         self.location = location
         self.color = color
         self.pieceType = pieceType
-        self.imageUpdate(location)
+        self.imageUpdate()
+        self.firstPawnMove = True #this will be used in getPossibleMoves
 
     def getPossibleMoves(self,myKing,myTeam,enemyTeam,listDir,numSpaces):
         #create a list of all possible coordinates the piece can move
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
         #remove spots that are off the board
-        self.spots = self.removeOffBoardSpots()
+        self.removeOffBoardSpots()
         #removes spot that will put their own king in check
-        self.spots = self.avoidOwnCheck(myKing,myTeam,enemyTeam)
+        #self.avoidOwnCheck(myKing,myTeam,enemyTeam)
         return self.spots
 
     
@@ -32,6 +34,8 @@ class Piece:
             self.imageUpdate(self.location)
             self.eatPiece(enemyPieces)
             return True,enemyPieces,self.image
+            if self.pieceType == "pawn":
+                self.firstPawnMove = False
         else:
             return False,enemyPieces,self.image
 
@@ -43,43 +47,48 @@ class Piece:
     #First filter
     def possibleSpots(self,listDir,numSpaces,enemyTeam,sameTeam):
         self.spots = []
-        validPawnMove = True #Use this to check if the pawn can go 2 spaces ahead
+        validPawnMove = True #Use this to check if the pawn can go 2 spaces ahead - is there a piece in front of it?
+        if self.firstPawnMove == False:
+            listDir.remove([0,2])
+        onAPiece = False
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
         for direction in listDir:
             x,y = self.location.getX(),self.location.getY()
-            if pieceType == "pawn":
+            if self.pieceType == "pawn":
                 if validPawnMove==False: break
-            for i in numSpaces:
-                x += direction[0]
-                y += direction[1]
+            for i in range(1,numSpaces+1):
+                print(direction[0])
+                x = direction[0] + x
+                y = direction[1] + y
                 if onAPiece: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
                 for piece in enemyTeam:
                     if piece.getLocation() == Point(x,y):
-                        if pieceType != "pawn":
-                            self.spots.append(Point(x,y))
-                        elif pieceType == "pawn":
+                        if self.pieceType == "pawn":
                             if direction == [1,1] or direction == [-1,1]:
                                 self.spots.append(Point(x,y))
                             elif direction == [0,1]:
                                 validPawnMove = False
+                        else:
+                            self.spots.append(Point(x,y))
                         onAPiece = True
                 for piece in sameTeam:
                     if piece.getLocation() == Point(x,y):
                         onAPiece = True
                         
-                        
+                if not onAPiece:
+                    self.spots.append(Point(x,y))
                         
     def eatPiece(self,enemyPieces):
         for piece in enemyPieces:
-            if piece.getLocation() == self.getLocation():
+            if piece.getLocation() == self.location:
                 piece.isEaten()
 
     #use this for updating message box 
     def getPieceType(self):
         return self.pieceType 
-#These functions are not called in main
+##These functions are not called in main##
     #checks if user input is valid (don't call this)
     def checkValidMove(self,userInput):
         if userInput in self.spots:
@@ -91,28 +100,27 @@ class Piece:
         self.eaten = True
 
     def removeOffBoardSpots(self):
-        for pt in self.possibleSpots:
-            if pt[0] >7 or pt[0] <1 or pt[1] >7 or pt[1] <1:
-                pt.remove
-
-    def imageUpdate(self,location):
+        for pt in self.spots:
+            if pt.getX()<0 or pt.getY()<0 or pt.getX()>7 or pt.getY()>7:
+                self.spots.remove(pt)
+    #works
+    def imageUpdate(self):
         if self.eaten:
-            location = Point(200,200)
-        self.image = Image(location,self.color+self.pieceType+".png")
+            self.location = Point(200,200)
+        self.image = Image(self.location,self.color+self.pieceType+".png")
         return self.image
 
-#Checking logic        
-    #to do: confirm that this is required by assignment
+##Checking logic##        
     #for pieces - allows them to only make moves that prevent the king from going into check
     #for king - prevents him from going to squares that put himself in check.
     def avoidOwnCheck(self, myKing,myTeam,enemyTeam):
-        kingX, kingY = myKing.getPosition()
+        kingX, kingY = myKing.getLocation().getX(),myKing.getLocation().getY()
         myTeam.append(self) #How to make a list append the object that it is in?
         self.currentLocation = self.location
         for spot in self.spots:
             self.location = spot
             for piece in enemyTeam:
-                possibleSpots = piece.getPossibleMoves(enemyTeam,myTeam)
+                possibleSpots = piece.getPossibleMoves(enemyKing,myTeam,enemyTeam,piece.calcListDirections(),piece.getNumSpaces())
                 if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
                     #This checks if the the king is in check without moving any of the pieces.
                     spot.remove(self.spots) #find correct notation
@@ -121,15 +129,28 @@ class Piece:
             #check that if the piece's location is at one of these spots, does myKing become in check?
 
     
+    def getKingCheck(self,enemyKing,enemyPieces,sameTeam):
+        numChecksReturned = 0
+        if self.pieceType == "king":
+            for piece in enemyPieces:
+                spots = []
+                spots = piece.getPossibleMoves(myKing,myTeam,enemyTeam,piece.calcListDirections(),piece.getNumSpaces())
+                for pt in spots:
+                    if pt == self.location:
+                        numChecksReturned +=1
+                        
+            if numChecksReturned>0:
+                return True
+            else: return False
+                    
 
-'"""""" accessors """""'
-def getEatean(self):
-    return self.eaten
+    def getEatean(self):
+        return self.eaten
 
-def checkColor(self):
-    return self.color
+    def checkColor(self):
+        return self.color
 
-def getLocation(self):
-    return self.location
+    def getLocation(self):
+        return (self.location)
 
 
