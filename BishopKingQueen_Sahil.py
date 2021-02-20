@@ -4,6 +4,7 @@ from Piece import Piece
 
 class King(Piece):
 
+    '''
     def calcPossibleSquares(self):
         #this is the possible coordinates for the piece
         self.possibleSpots = []
@@ -31,24 +32,33 @@ class King(Piece):
         for sq in allSquares:
             for piece in enemyPieces:
                 #same as above
-
+    '''
 
     
-        def __init()
-            super.init()
-            self.listDir = [[1,0]
+    def calcListDirections(self):
+        numSpaces = 1
+        listDir = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
 
+        return listDir, numSpaces
 
+    def getNumSpaces(self):
+        return 1
 
 #for moving it, we need to check if the square the user clicked in was in list self.possibleSquares
 #if it isn't, then we need to figure out if the user clicked on 
 
-class Bishop(Class):
+class Bishop(Piece):
 
 
 
-    def calcPossibleSquares(self):
-       
+    def calcListDirections(self):
+        numSpaces = 10
+        listDir = [[1,1],[1,-1],[-1,1],[-1,-1]]
+
+        return listDir
+
+    def getNumSpaces(self):
+        return 10
         
     
 
