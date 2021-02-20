@@ -13,14 +13,14 @@ class Piece:
         self.imageUpdate()
         self.firstPawnMove = True #this will be used in getPossibleMoves
 
-    def getPossibleMoves(self,myKing,myTeam,enemyTeam,listDir,numSpaces):
+    def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,listDir,numSpaces):
         #create a list of all possible coordinates the piece can move
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
         #remove spots that are off the board
         self.removeOffBoardSpots()
         #removes spot that will put their own king in check
-        #self.avoidOwnCheck(myKing,myTeam,enemyTeam)
+        self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
         return self.spots
 
     
@@ -113,7 +113,7 @@ class Piece:
 ##Checking logic##        
     #for pieces - allows them to only make moves that prevent the king from going into check
     #for king - prevents him from going to squares that put himself in check.
-    def avoidOwnCheck(self, myKing,myTeam,enemyTeam):
+    def avoidOwnCheck(self, myKing,enemyKing,myTeam,enemyTeam):
         kingX, kingY = myKing.getLocation().getX(),myKing.getLocation().getY()
         myTeam.append(self) #How to make a list append the object that it is in?
         self.currentLocation = self.location
