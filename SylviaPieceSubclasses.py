@@ -1,3 +1,5 @@
+from Piece import *
+
 # Subclasses Pawn, Rook, Knight
 
 class Pawn(Piece):
