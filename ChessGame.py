@@ -14,6 +14,9 @@ class ChessGame:
         # Create a list of two lists storing all pieces
         self.pieces = [[],[]]
 
+        self.checkmate = False
+
+
     def createPawns(self) -> list:
         """Creates all white, black pawns in their standard locations."""
         # Stores a list of two lists, pawns in each color (white first)
@@ -127,7 +130,12 @@ class ChessGame:
 
         return self.pieces
 
-    ##def main(self):
-    ##    #call
+##    def main(self):
+##        """Runs the game, using functions to move the pieces."""
+##
+##        while not self.checkmate:
+##            click = self.board_gui.allClicks()
+##            if click[1] == "square":
+##                self.moveMethod()
 
 ChessGame().createPieces()

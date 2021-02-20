@@ -130,13 +130,13 @@ class BoardGUI:
         # If the quit button is clicked, close the window
         if self.quit_button.clicked(pt) == True:
             self.win.close()
-            return "quit"
+            return "quit", "quit"
             
         # Check if a board square is clicked
         for sq in self.squares:
             # Identify the clicked square
             if sq.clicked(pt):
-                return sq
+                return sq, "square"
 
         # return "empty"
 
