@@ -25,13 +25,13 @@ class ChessGame:
         # Initialize the white (bottom-left) pawn coordinates (a2), create
         x,y = 0.5,1.5
         for i in range(8):
-            pawns[0] += Pawn(Point(x,y),"white","pawn")
+            pawns[0].append(Pawn(Point(x,y),"white","pawn"))
             x += 1
 
         # Initialize the black (top-left) pawn coordinates (a7), create
         x,y = 0.5,6.5
         for i in range(8):
-            pawns[1] += Pawn(Point(x,y),"black","pawn")
+            pawns[1].append(Pawn(Point(x,y),"black","pawn"))
 
         return pawns
         
@@ -41,12 +41,12 @@ class ChessGame:
         bishops = [[],[]]
 
         # Initialize the white bishop coordinates (c1 and f1), create
-        bishops[0] += Bishop(Point(2.5,0.5),"white","bishop")
-        bishops[0] += Bishop(Point(5.5,0.5),"white","bishop")
+        bishops[0].append(Bishop(Point(2.5,0.5),"white","bishop"))
+        bishops[0].append(Bishop(Point(5.5,0.5),"white","bishop"))
 
         # Initialize the black bishop coordinates (c8 and f8), create
-        bishops[1] += Bishop(Point(2.5,7.5),"black","bishop")
-        bishops[1] += Bishop(Point(5.5,7.5),"black","bishop")
+        bishops[1].append(Bishop(Point(2.5,7.5),"black","bishop"))
+        bishops[1].append(Bishop(Point(5.5,7.5),"black","bishop"))
 
         return bishops
 
@@ -56,12 +56,12 @@ class ChessGame:
         knights = [[],[]]
 
         # Initialize the white knight coordinates (b1 and g1), create
-        knights[0] += Knight(Point(1.5,0.5),"white","knight")
-        knights[0] += Knight(Point(6.5,0.5),"white","knight")
+        knights[0].append(Knight(Point(1.5,0.5),"white","knight"))
+        knights[0].append(Knight(Point(6.5,0.5),"white","knight"))
 
         # Initialize the black knight coordinates (b8 and g8), create
-        knights[1] += Knight(Point(1.5,7.5),"black","knight")
-        knights[1] += Knight(Point(6.5,7.5),"black","knight")
+        knights[1].append(Knight(Point(1.5,7.5),"black","knight"))
+        knights[1].append(Knight(Point(6.5,7.5),"black","knight"))
 
         return knights
 
@@ -71,12 +71,12 @@ class ChessGame:
         rooks = [[],[]]
 
         # Initialize the white rook coordinates (a1 and h1), create
-        rooks[0] += Rook(Point(0.5,0.5),"white","rook")
-        rooks[0] += Rook(Point(7.5,0.5),"white","rook")
+        rooks[0].append(Rook(Point(0.5,0.5),"white","rook"))
+        rooks[0].append(Rook(Point(7.5,0.5),"white","rook"))
 
         # Initialize the black rook coordinates (a8 and h8), create
-        rooks[1] += Rook(Point(0.5,7.5),"black","rook")
-        rooks[1] += Rook(Point(7.5,7.5),"black","rook")
+        rooks[1].append(Rook(Point(0.5,7.5),"black","rook"))
+        rooks[1].append(Rook(Point(7.5,7.5),"black","rook"))
 
         return rooks
 
@@ -86,10 +86,10 @@ class ChessGame:
         queens = [[],[]]
 
         # Initialize the white queen coordinates (d1), create
-        queens[0] += Queen(Point(3.5,0.5),"white","queen")
+        queens[0].append(Queen(Point(3.5,0.5),"white","queen"))
 
         # Initialize the black queen coordinates (d8), create
-        queens[1] += Queen(Point(3.5,7.5),"black","queen")
+        queens[1].append(Queen(Point(3.5,7.5),"black","queen"))
 
         return queens
 
@@ -99,10 +99,10 @@ class ChessGame:
         kings = [[],[]]
 
         # Initialize the white king coordinates (e1), create
-        kings[0] += King(Point(4.5,0.5),"white","king")
+        kings[0].append(King(Point(4.5,0.5),"white","king"))
 
         # Initialize the black king coordinates (e8), create
-        kings[1] += King(Point(4.5,7.5),"black","king")
+        kings[1].append(King(Point(4.5,7.5),"black","king"))
 
         return kings
 
@@ -123,7 +123,7 @@ class ChessGame:
         # Draw each piece to the graphics window
         for piece in self.pieces:
             for p in piece:
-                board_gui.drawPiece(p)
+                self.board_gui.drawPiece(p)
 
         self.whitepieces = self.pieces[0]
         self.blackpieces = self.pieces[1]
