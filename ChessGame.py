@@ -131,12 +131,148 @@ class ChessGame:
 
         return self.pieces
 
-##    def main(self):
-##        """Runs the game, using functions to move the pieces."""
-##
-##        while not self.checkmate:
-##            click = self.board_gui.allClicks()
-##            if click[1] == "square":
+    def pawnToQueen(self,pawn):
+        """Replaces a pawn with a queen once at the end of the board."""
+        
+        colors = ["white","black"]
+        
+        # Delete the pawn object, undraw the pawn image, and create a new
+        #   queen for the player's team color at the same location
+        loc = pawn.getLocation()
+        for i in range(2):
+            if self.color == colors[i]:
+                self.pieces[i].remove(pawn)
+                self.board_gui.undrawPiece(pawn)
+                self.pieces[i].append(Queen(loc,colors[i],"queen"))
+
+    def main(self):
+        """Runs the game, using functions to move the pieces."""
+
+        # Create the pieces
+        pieces = self.createPieces()
+
+        # Set up a list and counter to track clicked squares
+        clicked_sqs = []
+        clicked_sq = 0
+
+        # Set up a list to store the authentic click (choosing a piece)
+        choice = []
+
+        # Loop while the game is not ended (no king in checkmate)
+        while not self.checkmate:
+            click = self.board_gui.allClicks()
+            if click[1] == "square":
+                # Check if another square has already been clicked
+                # Check if the square is empty
+                # Check if it is choosing or placing a piece
+
+                # Check if another square has already been clicked
+                for square in self.board_gui.squares:
+                    if square.checkClicked():
+                        clicked_sq += 1
+                        clicked_sqs.append(square)
+                        
+                # If choosing a piece (one square click)
+                if clicked_sq == 1:
+                    for piece in pieces:
+                        for p in piece:
+                            # Check if the square is empty
+                            if (clicked_sqs[0].getLocation()
+                                != p.getLocation()):
+                                self.board_gui.updateMessage(
+                                    "Please click on \n a",
+                                    self.board_gui.checkTurnColor(),
+                                    "piece!")
+                                clicked_sqs[0].resetClicked()
+                                clicked_sqs.pop(0)
+                            # Check if it is the right team's piece 
+                            else:
+                                # If wrong team, update message
+                                if (p.checkColor() !=
+                                    self.board_gui.checkTurnColor()):
+                                    self.board_gui.updateMessage(
+                                        "Please click on \n a",
+                                        self.board_gui.checkTurnColor(),
+                                        "piece!")
+                                    clicked_sqs[0].resetClicked()
+                                    clicked_sqs.pop(0)
+                                # If right team, get possible moves
+                                else:
+                                    # Check if the piece has possible spots
+                                    if p.getPossibleMoves("params") != []:
+                                        self.board_gui.updateMessage(
+                                            "Please select a move \n",
+                                            "from the indicated \n",
+                                            "options")
+                                        # Sahil's stuff here?
+                                        # Incorporate the Piece Class
+                                        # Activate possible squares
+                                        # this is the authentic scenario
+                                        choice.append(p)
+                                        print("sahil")
+                                    # If not, update message
+                                    else:
+                                        self.board_gui.updateMessage(
+                                            "That piece does not have \n",
+                                            "any legal moves -- \n",
+                                            "please pick another piece.")
+                                        clicked_sqs[0].resetClicked()
+                                        clicked_sqs.pop(0)
+
+                # Check again if another square has already been clicked
+                #   in case the first click was inauthentic
+                for square in self.board_gui.squares:
+                    if square.checkClicked():
+                        clicked_sq += 1
+                        clicked_sqs.append(square)
+                
+                # If placing a piece (already one authentic square click)
+                if clicked_sq == 2:
+                    # Check if the clicked square is occupied
+                    for piece in pieces:
+                        for p in piece:
+                            # If occupied, check the piece's team
+                            if (p.getLocation() ==
+                                clicked_sq[1].getLocation()):
+                                # If same team, update message
+                                if (p.checkColor() ==
+                                    choice[0].checkColor()):
+                                    self.board_gui.updateMessage(
+                                        "That is not a valid move. \n",
+                                        "Please try again.")
+                                    clicked_sqs[1].resetClicked()
+                                    clicked_sqs.pop(1)
+                                # If other team, check if it's a valid move
+                                # (not putting king in check,possible move)
+                                # If so, capture the piece and remove it
+                                else:
+                                    # Sahil's stuff here?
+                                    # actually moving the piece
+                                    # make sure to update message
+                            # If empty, check if it's a valid move
+                            # (not putting king in check,possible move)
+                            else:
+                                # Sahil's stuff here?
+                                # actually moving the piece
+                                # make sure to update message
+                                
 ##                self.moveMethod()
 
-ChessGame().createPieces()
+        
+ChessGame().main()
+
+#TO-DOs:
+#   1. Function to check for checkmate in Piece Class that returns boolean
+#   2. Pawn transformation into Queen (del pawn object and create w queen?)
+#   3. Update square and button with edits, make sure importing the correct
+#       module.
+#   4. Make sure the pieces can distinguish between going through other
+#       pieces when moving, exception: knights
+#   5. Update the message after each turn to specifics of the move.
+#   6. Make a function in square that detects clicks but doesn't
+#       activate it 
+
+#QUESTIONS:
+#   1. Do you want us to show both "It is white's/black's move" AND ex.
+#       "White moved bishop to f4 -- it is now Black’s move." or just the
+#       latter?

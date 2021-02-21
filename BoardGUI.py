@@ -5,8 +5,8 @@
 #
 # Import the superclass Button subclass Square class
 from graphics import *
-from Button import *
-from Square import *
+from SylviaCopyButton import *
+from SylviaCopySquare import *
 from Piece import *
 
 class BoardGUI:
@@ -93,15 +93,16 @@ class BoardGUI:
         """Returns the color of whichever team's turn it is."""
         return self.color
 
-    def updateTurnColor(self):
-        """Updates the color of whichever team's turn it is."""
+    def updateTurn(self):
+        """Updates the color and message to reflect whichever team's
+            turn it is."""
         
         if self.color == "white":
             self.color = "black"
         else:
             self.color = "white"
 
-        return self.color
+        self.message.setText("It is " + self.color + "'s move.")
 
     def updateMessage(self,update):
         """Sets the message to update."""
@@ -121,6 +122,11 @@ class BoardGUI:
         
         piece.imageUpdate().draw(self.win)
 
+    def undrawPiece(self,piece):
+        """Undraws the piece in the graphics window."""
+
+        piece.imageUpdate().undraw(self.win)
+
     def allClicks(self):
         """Handles all mouse clicks and carries out its respective
             action and/or message update. Returns the clicked item."""
@@ -138,7 +144,7 @@ class BoardGUI:
             if sq.clicked(pt):
                 return sq, "square"
 
-        # return "empty"
+        return "empty"
 
                 
 ##                # If another square is activated, check valid move
@@ -172,6 +178,7 @@ class BoardGUI:
 ###### END OF CLASS ######
 def main():
     board = BoardGUI("white")
+    board.allClicks()
 
 #TO-DOs:
 #   1. Keep track of which color team's turn it is
