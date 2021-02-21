@@ -269,8 +269,6 @@ ChessGame().main()
 #   4. Make sure the pieces can distinguish between going through other
 #       pieces when moving, exception: knights
 #   5. Update the message after each turn to specifics of the move.
-#   6. Make a function in square that detects clicks but doesn't
-#       activate it 
 
 #QUESTIONS:
 #   1. Do you want us to show both "It is white's/black's move" AND ex.
