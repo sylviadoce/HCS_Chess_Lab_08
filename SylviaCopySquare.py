@@ -23,6 +23,7 @@ class Square(Button):
         #self.label=Text(center,label)
         #self.label.draw(win)
         #self.deactivate()
+        self.click = False
 
 #convert coordinates from standard to 0-7
 
@@ -88,7 +89,7 @@ class Square(Button):
 
 
       
-'''Test
+'''
 def main():
     win=GraphWin("Hi",800,600)
     sq = Square(win,Point(50,50),20,20)
@@ -101,6 +102,8 @@ def main():
     
     point = Point(50,50)
     sq.clicked(pt)
+
+    print(sq.getLocation())
     
 
 main()

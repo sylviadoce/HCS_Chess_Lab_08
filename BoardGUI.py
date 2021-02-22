@@ -134,7 +134,7 @@ class BoardGUI:
         pt = self.win.getMouse()
         
         # If the quit button is clicked, close the window
-        if self.quit_button.clicked(pt) == True:
+        if self.quit_button.clicked(pt):
             self.win.close()
             return "quit", "quit"
             

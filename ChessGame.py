@@ -169,9 +169,13 @@ class ChessGame:
                 # Check if another square has already been clicked
                 for square in self.board_gui.squares:
                     if square.checkClicked():
+                        print("hi")
                         clicked_sq += 1
                         clicked_sqs.append(square)
-                        
+
+
+                print("clicked_sqs:", clicked_sqs)
+                print("clicked_sqs[0]:", clicked_sqs[0])
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
                     for piece in pieces:
@@ -179,10 +183,10 @@ class ChessGame:
                             # Check if the square is empty
                             if (clicked_sqs[0].getLocation()
                                 != p.getLocation()):
-                                self.board_gui.updateMessage(
-                                    "Please click on \n a",
-                                    self.board_gui.checkTurnColor(),
-                                    "piece!")
+                                wrong = ("Please click on \n a",
+                                         self.board_gui.checkTurnColor(),
+                                         "piece!")
+                                self.board_gui.updateMessage(wrong)
                                 clicked_sqs[0].resetClicked()
                                 clicked_sqs.pop(0)
                             # Check if it is the right team's piece 
@@ -190,10 +194,11 @@ class ChessGame:
                                 # If wrong team, update message
                                 if (p.checkColor() !=
                                     self.board_gui.checkTurnColor()):
-                                    self.board_gui.updateMessage(
+                                    wrong = (
                                         "Please click on \n a",
                                         self.board_gui.checkTurnColor(),
                                         "piece!")
+                                    self.board_gui.updateMessage(wrong)
                                     clicked_sqs[0].resetClicked()
                                     clicked_sqs.pop(0)
                                 # If right team, get possible moves
@@ -201,8 +206,8 @@ class ChessGame:
                                     # Check if the piece has possible spots
                                     if p.getPossibleMoves("params") != []:
                                         self.board_gui.updateMessage(
-                                            "Please select a move \n",
-                                            "from the indicated \n",
+                                            "Please select a move \n"
+                                            "from the indicated \n"
                                             "options")
                                         # Sahil's stuff here?
                                         # Incorporate the Piece Class
@@ -213,8 +218,8 @@ class ChessGame:
                                     # If not, update message
                                     else:
                                         self.board_gui.updateMessage(
-                                            "That piece does not have \n",
-                                            "any legal moves -- \n",
+                                            "That piece does not have \n"
+                                            "any legal moves -- \n"
                                             "please pick another piece.")
                                         clicked_sqs[0].resetClicked()
                                         clicked_sqs.pop(0)
@@ -257,8 +262,6 @@ class ChessGame:
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
-                                
-##                self.moveMethod()
 
         
 ChessGame().main()

@@ -28,7 +28,7 @@ class Button:
         self.label.draw(win)
         self.deactivate()
 
-        self.clicked = False
+        self.click = False
 
     #activate a button
     def activate(self):
@@ -51,18 +51,20 @@ class Button:
     #registers if the button was clicked
     def clicked(self,pt):
         """Returns true if pt is inside"""
-
-        self.clicked = True
         
-        return (self.xmin <= pt.getX() <= self.xmax and
-                self.ymin <= pt.getY() <= self.ymax)
+        if (self.xmin <= pt.getX() <= self.xmax and
+                self.ymin <= pt.getY() <= self.ymax):
+            self.click = True
+            return True
+        else:
+            return False
 
-    def checkClicked(self):
-        return self.clicked
+    def checkClicked(self) -> bool:
+        return self.click
 
-    def resetClicked(self):
-        self.clicked = False
-        return
+    def resetClicked(self) -> bool:
+        self.click = False
+        return self.click
 
     #sets the text of self.label
     def setLabel(self,newText):
