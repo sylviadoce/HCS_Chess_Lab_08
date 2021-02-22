@@ -39,7 +39,7 @@ class King(Piece):
         numSpaces = 1
         listDir = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
 
-        return listDir, numSpaces
+        return listDir
 
     def getNumSpaces(self):
         return 1
