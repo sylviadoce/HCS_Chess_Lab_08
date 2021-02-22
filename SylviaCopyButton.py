@@ -61,7 +61,8 @@ class Button:
         return self.clicked
 
     def resetClicked(self):
-        return self.clicked = False
+        self.clicked = False
+        return
 
     #sets the text of self.label
     def setLabel(self,newText):

@@ -246,12 +246,14 @@ class ChessGame:
                                 # (not putting king in check,possible move)
                                 # If so, capture the piece and remove it
                                 else:
+                                    print("sahil")
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
+                                print("sahil")
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
