@@ -13,14 +13,14 @@ class Piece:
         self.imageUpdate()
         self.firstPawnMove = True #this will be used in getPossibleMoves
 
-    def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,listDir,numSpaces):
+    def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,listDir,numSpaces,avoidCheck):
         #create a list of all possible coordinates the piece can move
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
-        #self.spots = self.calcPossibleSquares(myTeam,enemyTeam)
         #remove spots that are off the board
-        self.removeOffBoardSpots()
         #removes spot that will put their own king in check
-        self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
+        if avoidCheck != "nocheck":
+            self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
+        self.removeOffBoardSpots()
         return self.spots
 
     
@@ -52,13 +52,13 @@ class Piece:
             listDir.remove([0,2])
         onAPiece = False
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
+        print(listDir)
         for direction in listDir:
             x,y = self.location.getX(),self.location.getY()
             if self.pieceType == "pawn":
                 if validPawnMove==False: break
-            for i in range(1,numSpaces+1):
-                print(direction[0])
-                x = direction[0] + x
+            for i in range(1,(int(numSpaces)+1)):
+                x += direction[0]
                 y = direction[1] + y
                 if onAPiece: break
                 #if on enemyTeam, this is the last possible square to go in this direction
@@ -101,8 +101,11 @@ class Piece:
 
     def removeOffBoardSpots(self):
         for pt in self.spots:
-            if pt.getX()<0 or pt.getY()<0 or pt.getX()>7 or pt.getY()>7:
-                self.spots.remove(pt)
+            if (pt.getX()<0) or (pt.getY()<0) or (pt.getX()>7) or (pt.getY()>7):
+                print("Here")
+                lst = self.spots
+                (lst).remove(pt)
+                print(lst)
     #works
     def imageUpdate(self):
         if self.eaten:
@@ -120,8 +123,8 @@ class Piece:
         for spot in self.spots:
             self.location = spot
             for piece in enemyTeam:
-                listDir,numSpaces = piece.calcListDirections()
-                possibleSpots = piece.getPossibleMoves(enemyKing,myTeam,enemyTeam,listDir,numSpaces)
+                listDir,numSpaces = piece.calcListDirections(),piece.getNumSpaces()
+                possibleSpots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,listDir,numSpaces,"nocheck")
                 if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
                     #This checks if the the king is in check without moving any of the pieces.
                     spot.remove(self.spots) #find correct notation
