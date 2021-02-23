@@ -1,3 +1,4 @@
+  
 # HCS Lab 04
 # Name: Sahil Agrawal
 #
@@ -27,6 +28,9 @@ class Button:
         self.label=Text(center,label)
         self.label.draw(win)
         self.deactivate()
+        self.type = label
+
+        self.click = False
 
     #activate a button
     def activate(self):
@@ -48,10 +52,21 @@ class Button:
         
     #registers if the button was clicked
     def clicked(self,pt):
-        """Returns true if button active and pt is inside"""
-        return (self.active and
-                self.xmin <= pt.getX() <= self.xmax and
-                self.ymin <= pt.getY() <= self.ymax)
+        """Returns true if pt is inside"""
+        
+        if (self.xmin <= pt.getX() <= self.xmax and
+                self.ymin <= pt.getY() <= self.ymax):
+            self.click = True
+            return True
+        else:
+            return False
+
+    def checkClicked(self) -> bool:
+        return self.click
+
+    def resetClicked(self) -> bool:
+        self.click = False
+        return self.click
 
     #sets the text of self.label
     def setLabel(self,newText):
@@ -62,3 +77,11 @@ class Button:
         """undraws the button from the window"""
         self.rect.undraw()
         self.label.undraw()
+
+# Changes:
+#   1. deleted self.active and so that the clicked method returns True if
+#       the square's area has a mouse click (doesn't need to be active)
+#   2. added the instance var self.clicked that saves whether the square
+#       has been clicked - added function checkClicked() to return the bool
+#   3. added the resetClicked function
+
