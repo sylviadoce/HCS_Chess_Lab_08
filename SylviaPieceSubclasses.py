@@ -1,8 +1,8 @@
-from Piece import *
+from SylviaPieceCopy import *
 
 # Subclasses Pawn, Rook, Knight
 
-class Pawn(Piece):
+class Pawn(SylviaPieceCopy):
     """Subclass of the Piece Class for pawns."""
 
     def calcListDirections(self) -> list:
@@ -14,7 +14,7 @@ class Pawn(Piece):
 
         return listDir, numSpaces
 
-class Rook(Piece):
+class Rook(SylviaPieceCopy):
     """Subclass of the Piece Class for rooks."""
 
     def calcListDirections(self) -> list:
@@ -31,7 +31,7 @@ class Rook(Piece):
         return listDir, numSpaces
     
 
-class Knight(Piece):
+class Knight(SylviaPieceCopy):
     """Subclass of the Piece Class for knights."""
 
     def calcListDirections(self) -> list:
@@ -43,7 +43,7 @@ class Knight(Piece):
 
         return listDir, numSpaces
 
-class Queen(Piece):
+class Queen(SylviaPieceCopy):
     """Subclass of the Piece Class for rooks."""
 
     def calcListDirections(self) -> list:

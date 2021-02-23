@@ -7,7 +7,7 @@
 from graphics import *
 from SylviaCopyButton import *
 from SylviaCopySquare import *
-from Piece import *
+from SylviaPieceCopy import *
 
 class BoardGUI:
     def __init__(self,color):

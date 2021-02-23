@@ -2,9 +2,9 @@
 #
 # Chess Games module that runs the game - class??
 #
-from Piece import *
+from SylviaPieceCopy import *
 from SylviaPieceSubclasses import *
-from BishopKingQueen_Sahil import *
+from SylviaBishopKingQueen_SahilCopy import *
 from BoardGUI import *
 
 class ChessGame:
@@ -154,7 +154,6 @@ class ChessGame:
         # Set up a list and counter to track clicked squares
         clicked_sqs = []
         clicked_sq = 0
-
         # Set up a list to store the authentic click (choosing a piece)
         choice = []
 
@@ -172,9 +171,11 @@ class ChessGame:
                 # Check if another square has already been clicked
                 for square in self.board_gui.squares:
                     if square.checkClicked():
-                        print("hi")
+                        print("another square already clicked")
                         clicked_sq += 1
                         clicked_sqs.append(square)
+
+                print("clicked_sqs[0]",clicked_sqs[0])
 
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
@@ -183,22 +184,26 @@ class ChessGame:
                             print("loop")
                             pop_sq = False
                             on_piece = False
-                            # Check if the square is empty
-                            if (clicked_sqs[0].getLocation()
-                                == p.getLocation()):
+##                            x,y = p.getLocation()
+                            # Check if a piece is on the square
+                            if (click[0].getLocation() == p.getLocation()):
                                 print("there")
                                 # If wrong team, update message
                                 if (p.checkColor() !=
                                     self.board_gui.checkTurnColor()):
+                                    print("error1")
                                     self.board_gui.updateMessage(
                                         "Please click on a \n" +
                                         self.board_gui.checkTurnColor() +
                                         " piece!")
                                     pop_sq = True
+                                    # get out of the for loop!!!
+                                    break
 ##                                    clicked_sqs[0].resetClicked()
 ##                                    clicked_sqs.pop(0)
                                 # If right team, get possible moves
                                 else:
+                                    print("over here")
                                     on_piece = True
                                     # Check if the piece has possible spots
                                     if p.getPossibleMoves("params") != []:
@@ -213,6 +218,8 @@ class ChessGame:
                                         # this is the authentic scenario
                                         choice.append(p)
                                         print("sahil")
+                                        # get out of the for loop!!!
+                                        break
                                     # If not, update message
                                     else:
                                         self.board_gui.updateMessage(
@@ -222,10 +229,14 @@ class ChessGame:
                                         pop_sq = True
 ##                                        clicked_sqs[0].resetClicked()
 ##                                        clicked_sqs.pop(0)
+                        # Get out of second for loop!!!
+                        break
+
+                    print("out of for loops")
 
                     # Check if it is the right team's piece 
-                    if not on_piece:
-                        print("here")
+                    if on_piece == False:
+                        print("error3")
                         self.board_gui.updateMessage(
                             "Please click on a \n" +
                             self.board_gui.checkTurnColor() +
