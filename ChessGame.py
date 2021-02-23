@@ -173,42 +173,37 @@ class ChessGame:
                         clicked_sq += 1
                         clicked_sqs.append(square)
 
-
-                print("clicked_sqs:", clicked_sqs)
-                print("clicked_sqs[0]:", clicked_sqs[0])
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
                     for piece in pieces:
                         for p in piece:
+                            print("loop")
+                            pop_sq = False
+                            on_piece = False
                             # Check if the square is empty
                             if (clicked_sqs[0].getLocation()
-                                != p.getLocation()):
-                                wrong = ("Please click on \n a",
-                                         self.board_gui.checkTurnColor(),
-                                         "piece!")
-                                self.board_gui.updateMessage(wrong)
-                                clicked_sqs[0].resetClicked()
-                                clicked_sqs.pop(0)
-                            # Check if it is the right team's piece 
-                            else:
+                                == p.getLocation()):
+                                print("there")
                                 # If wrong team, update message
                                 if (p.checkColor() !=
                                     self.board_gui.checkTurnColor()):
-                                    wrong = (
-                                        "Please click on \n a",
-                                        self.board_gui.checkTurnColor(),
-                                        "piece!")
-                                    self.board_gui.updateMessage(wrong)
-                                    clicked_sqs[0].resetClicked()
-                                    clicked_sqs.pop(0)
+                                    self.board_gui.updateMessage(
+                                        "Please click on a \n" +
+                                        self.board_gui.checkTurnColor() +
+                                        " piece!")
+                                    pop_sq = True
+##                                    clicked_sqs[0].resetClicked()
+##                                    clicked_sqs.pop(0)
                                 # If right team, get possible moves
                                 else:
+                                    on_piece = True
                                     # Check if the piece has possible spots
                                     if p.getPossibleMoves("params") != []:
                                         self.board_gui.updateMessage(
                                             "Please select a move \n"
                                             "from the indicated \n"
                                             "options")
+                                        on_piece = True
                                         # Sahil's stuff here?
                                         # Incorporate the Piece Class
                                         # Activate possible squares
@@ -221,8 +216,25 @@ class ChessGame:
                                             "That piece does not have \n"
                                             "any legal moves -- \n"
                                             "please pick another piece.")
-                                        clicked_sqs[0].resetClicked()
-                                        clicked_sqs.pop(0)
+                                        pop_sq = True
+##                                        clicked_sqs[0].resetClicked()
+##                                        clicked_sqs.pop(0)
+
+                    # Check if it is the right team's piece 
+                    if not on_piece:
+                        print("here")
+                        self.board_gui.updateMessage(
+                            "Please click on a \n" +
+                            self.board_gui.checkTurnColor() +
+                            " piece!")
+                        pop_sq = True
+##                                clicked_sqs[0].resetClicked()
+##                                clicked_sqs.pop(0)
+                if pop_sq:
+                    clicked_sqs[0].resetClicked()
+                    clicked_sqs.pop(0)
+
+                print("before clicked_sqs:", clicked_sqs)
 
                 # Check again if another square has already been clicked
                 #   in case the first click was inauthentic
@@ -230,6 +242,8 @@ class ChessGame:
                     if square.checkClicked():
                         clicked_sq += 1
                         clicked_sqs.append(square)
+
+                print("after clicked_sqs:", clicked_sqs)
                 
                 # If placing a piece (already one authentic square click)
                 if clicked_sq == 2:
