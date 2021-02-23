@@ -1,9 +1,10 @@
-from Button import *
+from SylviaCopyButton import *
 from graphics import *
 
 class Square(Button):
     #Works
     def __init__(self,win,center,width,height):
+        self.center = center
         w,h=width/2.0,height/2.0
         x,y=center.getX(), center.getY()
         self.xmax, self.xmin = x+w, x-w
@@ -20,9 +21,11 @@ class Square(Button):
         self.center = center
         self.active = False
         self.occupied = False
+        self.type = "square"
         #self.label=Text(center,label)
         #self.label.draw(win)
         #self.deactivate()
+        self.click = False
 
 #convert coordinates from standard to 0-7
 
@@ -80,15 +83,16 @@ class Square(Button):
     def getLocation(self):
         #how de handle the coordinate grid?
         #We can convert everything to 0-7
-        return self.center.getX(),self.center.getY()
+        return self.center
 
     def active(self):
         return self.active
 
-
+    def getType(self):
+        return self.type
 
       
-'''Test
+'''
 def main():
     win=GraphWin("Hi",800,600)
     sq = Square(win,Point(50,50),20,20)
@@ -101,8 +105,7 @@ def main():
     
     point = Point(50,50)
     sq.clicked(pt)
+    print(sq.getLocation())
     
-
 main()
 '''
-
