@@ -62,6 +62,10 @@ class Button:
     def checkClicked(self) -> bool:
         return self.click
 
+    def setClicked(self) -> bool:
+        self.click = True
+        return self.click
+
     def resetClicked(self) -> bool:
         self.click = False
         return self.click
@@ -82,3 +86,4 @@ class Button:
 #   2. added the instance var self.clicked that saves whether the square
 #       has been clicked - added function checkClicked() to return the bool
 #   3. added the resetClicked function
+#   4. added setClicked function

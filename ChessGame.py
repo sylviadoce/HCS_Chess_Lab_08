@@ -166,6 +166,9 @@ class ChessGame:
                 # Check if the square is empty
                 # Check if it is choosing or placing a piece
 
+                # Set the clicked square status to clicked (True)
+                click[0].setClicked()
+
                 # Check if another square has already been clicked
                 for square in self.board_gui.squares:
                     if square.checkClicked():
@@ -277,6 +280,11 @@ class ChessGame:
                                 # actually moving the piece
                                 # make sure to update message
 
+        while True:
+           click = self.board_gui.allClicks()
+           if str(click) != ("quit","quit"):
+                self.board_gui.closeGame()
+                ChessGame().main()        
         
 ChessGame().main()
 

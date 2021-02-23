@@ -127,6 +127,9 @@ class BoardGUI:
 
         piece.imageUpdate().undraw(self.win)
 
+    def closeGame(self):
+        self.win.close()
+
     def allClicks(self):
         """Handles all mouse clicks and carries out its respective
             action and/or message update. Returns the clicked item."""
@@ -135,13 +138,15 @@ class BoardGUI:
         
         # If the quit button is clicked, close the window
         if self.quit_button.clicked(pt):
-            return self.quit_button
+            quit()
             
         # Check if a board square is clicked
         for sq in self.squares:
             # Identify the clicked square
             if sq.clicked(pt):
-                return sq
+                return sq,"square"
+
+        return "quit","quit"
                 
 ##                # If another square is activated, check valid move
 ##                if self.checkBoardStatus != 0:
