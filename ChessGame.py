@@ -277,6 +277,12 @@ class ChessGame:
                                 # actually moving the piece
                                 # make sure to update message
 
+##        while True:
+##            click = self.board_gui.allClicks()
+##            if click == "quit":
+##                print("close")
+##                self.board_gui.close()
+
         
 ChessGame().main()
 

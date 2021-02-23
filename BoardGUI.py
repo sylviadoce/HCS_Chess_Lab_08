@@ -135,17 +135,13 @@ class BoardGUI:
         
         # If the quit button is clicked, close the window
         if self.quit_button.clicked(pt):
-            self.win.close()
-            return "quit", "quit"
+            return self.quit_button
             
         # Check if a board square is clicked
         for sq in self.squares:
             # Identify the clicked square
             if sq.clicked(pt):
-                return sq, "square"
-
-        return "empty"
-
+                return sq
                 
 ##                # If another square is activated, check valid move
 ##                if self.checkBoardStatus != 0:
