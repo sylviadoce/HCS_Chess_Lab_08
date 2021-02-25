@@ -45,6 +45,12 @@ class Square(Button):
         self.rect.setWidth(1)
         self.active = False
 
+    def getX(self):
+        return (self.center.getX())
+    
+    def getY(self):
+        return (self.center.getY())
+
     #Still needs work
     '''    
     def clicked(self,pt):
@@ -90,6 +96,7 @@ class Square(Button):
 
     def getType(self):
         return self.type
+
 
       
 '''

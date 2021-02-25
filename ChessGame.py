@@ -265,13 +265,14 @@ class ChessGame:
                                             "from the indicated \n"
                                             "options")
                                         on_piece = True
-                                        # Sahil's stuff here?
-                                        # Incorporate the Piece Class
-                                        # Activate possible squares
                                         # this is the authentic scenario
+                                        # Activate possible spots
+                                        for spot in spots:
+                                            for sq in self.board_gui.squares:
+                                                x,y = spot.getX(),spot.getY()
+                                                if x == sq.getLocation().x and y == sq.getLocation().y:
+                                                    sq.activate()
                                         choice.append(p)
-                                        print("sahil")
-                                        # get out of the for loop!!!
                                         break
                                     # If not, update message
                                     else:
@@ -280,6 +281,7 @@ class ChessGame:
                                             "any legal moves -- \n"
                                             "please pick another piece.")
                                         pop_sq = True
+                                        break
 ##                                        clicked_sqs[0].resetClicked()
 ##                                        clicked_sqs.pop(0)
                         # Get out of second for loop!!!
@@ -303,14 +305,22 @@ class ChessGame:
 
                 print("before clicked_sqs:", clicked_sqs)
 
+                #### SECOND CLICK STUFF ####
+
+                # Expect a second click
+                click = self.board_gui.allClicks()
+
                 # Check again if another square has already been clicked
                 #   in case the first click was inauthentic
                 for square in self.board_gui.squares:
                     if square.checkClicked():
-                        clicked_sq += 1
-                        clicked_sqs.append(square)
+                        for i in clicked_sqs:
+                            if i not in clicked_sqs:
+                                clicked_sq += 1
+                                clicked_sqs.append(square)
 
                 print("after clicked_sqs:", clicked_sqs)
+                print("after counter:", clicked_sq)
                 
                 # If placing a piece (already one authentic square click)
                 if clicked_sq == 2:
@@ -336,6 +346,7 @@ class ChessGame:
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
+                                    # BREAK OUT OF THE WHILE LOOP
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
@@ -343,6 +354,7 @@ class ChessGame:
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
+                                # break out of the while loop
 
         while True:
            click = self.board_gui.allClicks()
