@@ -1,8 +1,8 @@
 #Author: Sahil Agrawal
 
-from SylviaPieceCopy import Piece
+from Piece import Piece
 
-class King(SylviaPieceCopy):
+class King(Piece):
 
     '''
     def calcPossibleSquares(self):
@@ -39,7 +39,7 @@ class King(SylviaPieceCopy):
         numSpaces = 1
         listDir = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
 
-        return listDir
+        return listDir, numSpaces
 
     def getNumSpaces(self):
         return 1
@@ -47,7 +47,7 @@ class King(SylviaPieceCopy):
 #for moving it, we need to check if the square the user clicked in was in list self.possibleSquares
 #if it isn't, then we need to figure out if the user clicked on 
 
-class Bishop(SylviaPieceCopy):
+class Bishop(Piece):
 
 
 
@@ -55,14 +55,11 @@ class Bishop(SylviaPieceCopy):
         numSpaces = 10
         listDir = [[1,1],[1,-1],[-1,1],[-1,-1]]
 
-        return listDir
+        return listDir, numSpaces
 
     def getNumSpaces(self):
         return 10
-        
 
 #CHANGES:
-#   1. Superclass
-#   2. Import Statements
-
-    
+#   1. added numSpaces as second return item in calcListeDirections
+        

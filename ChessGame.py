@@ -16,6 +16,8 @@ class ChessGame:
 
         self.checkmate = False
 
+        # Getting either the white team (0) or black team (1)
+        self.teamnum = [0,1]
 
     def createPawns(self) -> list:
         """Creates all white, black pawns in their standard locations."""
@@ -145,6 +147,51 @@ class ChessGame:
                 self.board_gui.undrawPiece(pawn)
                 self.pieces[i].append(Queen(loc,colors[i],"queen"))
 
+    def getEnemyTeam(self) -> list:
+        if self.board_gui.checkTurnColor() == "white":
+            enemyPieces = self.pieces[1]
+        else:
+            enemyPieces = self.pieces[0]
+
+        return enemyPieces
+
+    def getMyTeam(self) -> list:
+        if self.board_gui.checkTurnColor() == "white":
+            sameTeam = self.pieces[0]
+        else:
+            sameTeam = self.pieces[1]
+
+        return sameTeam
+
+    def getEnemyKing(self) -> list:
+        if self.board_gui.checkTurnColor() == "white":
+            for bpiece in self.pieces[1]:
+                if bpiece.getPieceType() == "king":
+                    enemyKing = bpiece
+                    
+                    return enemyKing
+        else:
+            for wpiece in self.pieces[0]:
+                if wpiece.getPieceType() == "king":
+                    enemyKing = wpiece
+                    
+                    return enemyKing
+
+
+    def getMyKing(self) -> list:
+        if self.board_gui.checkTurnColor() == "white":
+            for wpiece in self.pieces[0]:
+                if wpiece.getPieceType() == "king":
+                    myKing = wpiece
+                    
+                    return myKing
+        else:
+            for bpiece in self.pieces[1]:
+                if bpiece.getPieceType() == "king":
+                    myKing = bpiece
+                    
+                    return myKing
+
     def main(self):
         """Runs the game, using functions to move the pieces."""
 
@@ -205,8 +252,14 @@ class ChessGame:
                                 else:
                                     print("over here")
                                     on_piece = True
+                                    spots = p.getPossibleMoves(
+                                        self.getMyKing(),
+                                        self.getEnemyKing(),
+                                        self.getMyTeam(),
+                                        self.getEnemyTeam(),"y")
+                                    print(spots) 
                                     # Check if the piece has possible spots
-                                    if p.getPossibleMoves("params") != []:
+                                    if spots != []:
                                         self.board_gui.updateMessage(
                                             "Please select a move \n"
                                             "from the indicated \n"
