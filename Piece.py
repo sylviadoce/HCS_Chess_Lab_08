@@ -18,9 +18,14 @@ class Piece:
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #remove spots that are off the board
         #removes spot that will put their own king in check
+        print(self.pieceType)
         if avoidCheck != "nocheck":
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
-        self.removeOffBoardSpots()
+        
+        print(self.spots,"First")
+        #self.delCornerSpots()
+        #self.removeOffBoardSpots()
+        print(self.spots,"second\n")
         return self.spots
 
     
@@ -52,15 +57,16 @@ class Piece:
             listDir.remove([0,2])
         onAPiece = False
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
-        print(listDir)
         for direction in listDir:
             x,y = self.location.getX(),self.location.getY()
             if self.pieceType == "pawn":
                 if validPawnMove==False: break
             for i in range(1,(int(numSpaces)+1)):
+                
                 x += direction[0]
                 y = direction[1] + y
-                if onAPiece: break
+                if onAPiece or x<0 or y<0 or x>7 or y>7: break
+                #elif x <0 or y<0 or x>0 or y>0: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
                 for piece in enemyTeam:
@@ -99,13 +105,20 @@ class Piece:
     def isEaten(self):
         self.eaten = True
 
-    def removeOffBoardSpots(self):
-        for pt in self.spots:
-            if (pt.getX()<0) or (pt.getY()<0) or (pt.getX()>7) or (pt.getY()>7):
-                print("Here")
-                lst = self.spots
-                (lst).remove(pt)
-                print(lst)
+
+    #def removeOffBoardSpots(self):
+    #    lstIndex = []
+    #    if len(self.spots) != 0:
+    #       for i in range(len(self.spots)-1):
+     #           pt = self.spots[i]
+    #            if (pt.getX()>0) or (pt.getY()>0) or (pt.getX()<7) or (pt.getY()<7):
+    #                lstIndex.append(i)
+    #        spots = self.spots
+   #         self.spots = []
+    #        for index in lstIndex:
+    #            self.spots.append(spots[index])
+                
+  
     #works
     def imageUpdate(self):
         if self.eaten:
@@ -138,7 +151,7 @@ class Piece:
         if self.pieceType == "king":
             for piece in enemyPieces:
                 spots = []
-                spots = piece.getPossibleMoves(myKing,myTeam,enemyTeam,piece.calcListDirections(),piece.getNumSpaces())
+                spots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,piece.calcListDirections(),piece.getNumSpaces())
                 for pt in spots:
                     if pt == self.location:
                         numChecksReturned +=1
