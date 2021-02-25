@@ -2,9 +2,9 @@
 #
 # Chess Games module that runs the game - class??
 #
-from SylviaPieceCopy import *
+from Piece import *
 from SylviaPieceSubclasses import *
-from SylviaBishopKingQueen_SahilCopy import *
+from BishopKingQueen_Sahil import *
 from BoardGUI import *
 
 class ChessGame:

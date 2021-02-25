@@ -1,4 +1,4 @@
-from SylviaCopyButton import *
+from Button import *
 from graphics import *
 
 class Square(Button):
