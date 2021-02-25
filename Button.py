@@ -14,7 +14,7 @@ class Button:
     def __init__(self,win,center,width,height,label):
         """creates a rectangular button, eg:
         qb=Button(myWin,centerPoint, width, height, 'Quit')"""
-
+        self.center = center
         w,h=width/2.0,height/2.0
         x,y=center.getX(), center.getY()
         self.xmax, self.xmin = x+w, x-w
@@ -80,6 +80,10 @@ class Button:
         self.rect.undraw()
         self.label.undraw()
 
+    def getX(self):
+        return self.center.getX()
+    def getY(self):
+        return self.center.getY()
 # Changes:
 #   1. deleted self.active and so that the clicked method returns True if
 #       the square's area has a mouse click (doesn't need to be active)
