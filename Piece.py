@@ -15,7 +15,7 @@ class Piece:
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
         #create a list of all possible coordinates the piece can move
-        listDir,numSpaces = self.calcListDirections(),self.getNumSpaces()
+        listDir,numSpaces = self.calcListDirections()
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #remove spots that are off the board
         #removes spot that will put their own king in check
@@ -170,5 +170,8 @@ class Piece:
 
     def getLocation(self):
         return (self.location)
+
+    def getLocationXY(self):
+        return self.location.getX(),self.location.getY()
 
 
