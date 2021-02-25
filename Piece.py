@@ -13,8 +13,9 @@ class Piece:
         self.imageUpdate()
         self.firstPawnMove = True #this will be used in getPossibleMoves
 
-    def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,listDir,numSpaces,avoidCheck):
+    def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
         #create a list of all possible coordinates the piece can move
+        listDir,numSpaces = self.calcListDirections(),self.getNumSpaces()
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #remove spots that are off the board
         #removes spot that will put their own king in check
@@ -22,10 +23,10 @@ class Piece:
         if avoidCheck != "nocheck":
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
         
-        print(self.spots,"First")
+        #print(self.spots,"First")
         #self.delCornerSpots()
         #self.removeOffBoardSpots()
-        print(self.spots,"second\n")
+        #print(self.spots,"second\n")
         return self.spots
 
     
@@ -55,32 +56,32 @@ class Piece:
         validPawnMove = True #Use this to check if the pawn can go 2 spaces ahead - is there a piece in front of it?
         if self.firstPawnMove == False:
             listDir.remove([0,2])
-        onAPiece = False
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
         for direction in listDir:
             x,y = self.location.getX(),self.location.getY()
+            onAPiece = False
             if self.pieceType == "pawn":
                 if validPawnMove==False: break
             for i in range(1,(int(numSpaces)+1)):
-                
                 x += direction[0]
                 y = direction[1] + y
-                if onAPiece or x<0 or y<0 or x>7 or y>7: break
+                if onAPiece or x<0 or y<0 or x>7 or y>7:
+                    break
                 #elif x <0 or y<0 or x>0 or y>0: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
                 for piece in enemyTeam:
-                    if piece.getLocation() == Point(x,y):
+                    if x == piece.getLocation().getX() and y == piece.getLocation().getY():
                         if self.pieceType == "pawn":
                             if direction == [1,1] or direction == [-1,1]:
                                 self.spots.append(Point(x,y))
                             elif direction == [0,1]:
                                 validPawnMove = False
-                        else:
-                            self.spots.append(Point(x,y))
+
                         onAPiece = True
                 for piece in sameTeam:
-                    if piece.getLocation() == Point(x,y):
+                    if x == piece.getLocation().getX() and y == piece.getLocation().getY():
+                        print("76")
                         onAPiece = True
                         
                 if not onAPiece:
@@ -137,7 +138,7 @@ class Piece:
             self.location = spot
             for piece in enemyTeam:
                 listDir,numSpaces = piece.calcListDirections(),piece.getNumSpaces()
-                possibleSpots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,listDir,numSpaces,"nocheck")
+                possibleSpots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
                 if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
                     #This checks if the the king is in check without moving any of the pieces.
                     spot.remove(self.spots) #find correct notation
