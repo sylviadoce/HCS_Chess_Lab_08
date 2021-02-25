@@ -233,7 +233,7 @@ class ChessGame:
                             on_piece = False
 ##                            x,y = p.getLocation()
                             # Check if a piece is on the square
-                            if (click[0].getLocation() == p.getLocation()):
+                            if (click[0].getLocation() == p.getLocationXY()):
                                 print("there")
                                 # If wrong team, update message
                                 if (p.checkColor() !=
@@ -318,7 +318,7 @@ class ChessGame:
                     for piece in pieces:
                         for p in piece:
                             # If occupied, check the piece's team
-                            if (p.getLocation() ==
+                            if (p.getLocationXY() ==
                                 clicked_sq[1].getLocation()):
                                 # If same team, update message
                                 if (p.checkColor() ==
