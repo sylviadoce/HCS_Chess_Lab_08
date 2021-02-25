@@ -39,7 +39,7 @@ class King(Piece):
         numSpaces = 1
         listDir = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
 
-        return listDir
+        return listDir,1
 
     def getNumSpaces(self):
         return 1
@@ -55,7 +55,7 @@ class Bishop(Piece):
         numSpaces = 10
         listDir = [[1,1],[1,-1],[-1,1],[-1,-1]]
 
-        return listDir
+        return listDir,10
 
     def getNumSpaces(self):
         return 10
