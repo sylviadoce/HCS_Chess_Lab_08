@@ -137,7 +137,7 @@ class Piece:
         for spot in self.spots:
             self.location = spot
             for piece in enemyTeam:
-                listDir,numSpaces = piece.calcListDirections(),piece.getNumSpaces()
+                listDir,numSpaces = piece.calcListDirections()
                 possibleSpots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
                 if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
                     #This checks if the the king is in check without moving any of the pieces.
