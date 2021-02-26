@@ -1,4 +1,4 @@
-from Button import *
+from SylviaCopyButton import *
 from graphics import *
 
 class Square(Button):
@@ -44,12 +44,6 @@ class Square(Button):
         self.rect.setFill(self.color)
         self.rect.setWidth(1)
         self.active = False
-
-    def getX(self):
-        return (self.center.getX())
-    
-    def getY(self):
-        return (self.center.getY())
 
     #Still needs work
     '''    
@@ -97,22 +91,13 @@ class Square(Button):
     def getType(self):
         return self.type
 
+    def getX(self):
+        return self.center.getX()
 
-      
-'''
 def main():
     win=GraphWin("Hi",800,600)
     sq = Square(win,Point(50,50),20,20)
-    sq.activate()
-    c = sq.clicked(Point(50,50))
-    print(c)
-    
-    sq.deactivate()
-    pt=win.getMouse()
-    
-    point = Point(50,50)
-    sq.clicked(pt)
-    print(sq.getLocation())
+    print(sq.getX())
     
 main()
-'''
+
