@@ -222,7 +222,7 @@ class ChessGame:
                         clicked_sq += 1
                         clicked_sqs.append(square)
 
-                print("clicked_sqs[0]",clicked_sqs[0])
+                print("clicked_sqs",clicked_sqs)
 
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
@@ -234,11 +234,9 @@ class ChessGame:
 ##                            x,y = p.getLocation()
                             # Check if a piece is on the square
                             if (click[0].getLocation() == p.getLocationXY()):
-                                print("there")
                                 # If wrong team, update message
                                 if (p.checkColor() !=
                                     self.board_gui.checkTurnColor()):
-                                    print("error1")
                                     self.board_gui.updateMessage(
                                         "Please click on a \n" +
                                         self.board_gui.checkTurnColor() +
@@ -270,7 +268,7 @@ class ChessGame:
                                         for spot in spots:
                                             for sq in self.board_gui.squares:
                                                 x,y = spot.getX(),spot.getY()
-                                                if x == sq.getLocation().x and y == sq.getLocation().y:
+                                                if x == sq.getLocation()[0] and y == sq.getLocation()[1]:
                                                     sq.activate()
                                         choice.append(p)
                                         break
@@ -291,7 +289,6 @@ class ChessGame:
 
                     # Check if it is the right team's piece 
                     if on_piece == False:
-                        print("error3")
                         self.board_gui.updateMessage(
                             "Please click on a \n" +
                             self.board_gui.checkTurnColor() +
@@ -300,36 +297,47 @@ class ChessGame:
 ##                                clicked_sqs[0].resetClicked()
 ##                                clicked_sqs.pop(0)
                 if pop_sq:
+                    print("go over here to remove!")
                     clicked_sqs[0].resetClicked()
                     clicked_sqs.pop(0)
 
                 print("before clicked_sqs:", clicked_sqs)
 
-                #### SECOND CLICK STUFF ####
+                #### SECOND CLICK STUFF - AFTER ONE VALID CLICK ####
 
-                # Expect a second click
-                click = self.board_gui.allClicks()
+                # Expect a second click that is a square
+                click_two = self.board_gui.allClicks()
+                if click_two[1] != "square":
+                    continue
 
-                # Check again if another square has already been clicked
-                #   in case the first click was inauthentic
-                for square in self.board_gui.squares:
-                    if square.checkClicked():
-                        for i in clicked_sqs:
-                            if i not in clicked_sqs:
-                                clicked_sq += 1
-                                clicked_sqs.append(square)
+                print("active squares: ", self.board_gui.getActiveSquares())
+                for sq in self.board_gui.getActiveSquares():
+                    if sq.getLocation() == click_two[0].getLocation():
+                        clicked_sqs.append(click_two[0])
+                        clicked_sq += 1
+
+##                # Check again if another square has already been clicked
+##                #   in case the first click was inauthentic
+##                for square in self.board_gui.squares:
+##                    if square.checkClicked():
+##                        for i in clicked_sqs:
+##                            if i not in clicked_sqs:
+##                                print("checking clicks correctly")
+##                                clicked_sq += 1
+##                                clicked_sqs.append(square)
 
                 print("after clicked_sqs:", clicked_sqs)
                 print("after counter:", clicked_sq)
                 
                 # If placing a piece (already one authentic square click)
                 if clicked_sq == 2:
+                    print("2 clicks!!")
                     # Check if the clicked square is occupied
                     for piece in pieces:
                         for p in piece:
                             # If occupied, check the piece's team
                             if (p.getLocationXY() ==
-                                clicked_sq[1].getLocation()):
+                                click_two[0].getLocation()):
                                 # If same team, update message
                                 if (p.checkColor() ==
                                     choice[0].checkColor()):
@@ -342,7 +350,7 @@ class ChessGame:
                                 # (not putting king in check,possible move)
                                 # If so, capture the piece and remove it
                                 else:
-                                    print("sahil")
+                                    print("sahil1")
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
@@ -350,7 +358,7 @@ class ChessGame:
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
-                                print("sahil")
+                                print("sahil2")
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message

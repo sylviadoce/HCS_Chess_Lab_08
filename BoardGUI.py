@@ -5,9 +5,9 @@
 #
 # Import the superclass Button subclass Square class
 from graphics import *
-from SylviaCopyButton import *
-from SylviaCopySquare import *
-from SylviaPieceCopy import *
+from Button import *
+from Square import *
+from Piece import *
 
 class BoardGUI:
     def __init__(self,color):
@@ -126,6 +126,16 @@ class BoardGUI:
         """Undraws the piece in the graphics window."""
 
         piece.imageUpdate().undraw(self.win)
+
+    def getActiveSquares(self) -> list:
+        """Returns a list of all the activated squares."""
+
+        active_sqs = []
+        for sq in self.squares:
+            if sq.checkActive():
+                active_sqs.append(sq)
+
+        return active_sqs      
 
     def closeGame(self):
         self.win.close()

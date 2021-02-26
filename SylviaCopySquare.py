@@ -1,4 +1,4 @@
-from SylviaCopyButton import *
+from Button import *
 from graphics import *
 
 class Square(Button):
@@ -83,8 +83,14 @@ class Square(Button):
         #We can convert everything to 0-7
         return self.center.getX(),self.center.getY()
 
-    def active(self):
+    def checkActive(self):
         return self.active
+
+    def getType(self):
+        return self.type
+
+    def getX(self):
+        return self.center.getX()
 
 
 
