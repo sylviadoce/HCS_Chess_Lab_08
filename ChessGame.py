@@ -198,14 +198,21 @@ class ChessGame:
         # Create the pieces
         pieces = self.createPieces()
 
-        # Set up a list and counter to track clicked squares
-        clicked_sqs = []
-        clicked_sq = 0
+##        # Set up a list and counter to track clicked squares
+##        clicked_sqs = []
+##        clicked_sq = 0
         # Set up a list to store the authentic click (choosing a piece)
         choice = []
 
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
+            print("while loop")
+            # Set up a list and counter to track clicked squares
+            clicked_sqs = []
+            clicked_sq = 0
+
+            pop_sq = False
+            
             click = self.board_gui.allClicks()
             if click[1] == "square":
                 # Check if another square has already been clicked
@@ -215,17 +222,37 @@ class ChessGame:
                 # Set the clicked square status to clicked (True)
                 click[0].setClicked()
 
+                print("before this clicked_sqs",clicked_sqs)
+
                 # Check if another square has already been clicked
                 for square in self.board_gui.squares:
-                    if square.checkClicked():
-                        print("another square already clicked")
+                    # For first move, bypass conditionals
+                    if choice == [] and square.checkClicked():
+                        print("first move")
                         clicked_sq += 1
                         clicked_sqs.append(square)
+                    # Remove any invalid second clicks
+                    elif (square.checkClicked() and (square.getLocation()
+                        != choice[0].getLocation())):
+                        print("invalid other sq clicked")
+                        # Remove the invalid square
+                        clicked_sqs.remove(square)
+                        # If one of the possible spots
+                        if square.checkActive():
+                            print("adding here")
+                            clicked_sq += 1
+                            clicked_sqs.append(square)
+##                    if square.checkClicked():
+##                        print("yes move")
+##                        clicked_sq += 1
+##                        clicked_sqs.append(square)
+                        
 
-                print("clicked_sqs",clicked_sqs)
+                print("after this clicked_sqs",clicked_sqs)
 
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
+                    print("one click")
                     for piece in pieces:
                         for p in piece:
                             print("loop")
@@ -307,14 +334,25 @@ class ChessGame:
 
                 # Expect a second click that is a square
                 click_two = self.board_gui.allClicks()
-                if click_two[1] != "square":
+                if click_two[1] != "square" or not click_two[0].checkActive():
+                    print("not an option")
                     continue
 
                 print("active squares: ", self.board_gui.getActiveSquares())
                 for sq in self.board_gui.getActiveSquares():
                     if sq.getLocation() == click_two[0].getLocation():
+                        print("clicking on an active sq")
                         clicked_sqs.append(click_two[0])
                         clicked_sq += 1
+                        valid_move = True
+                        break
+                    else:
+                        print("error1111")
+                        valid_move = False
+                        self.board_gui.updateMessage(
+                            "That is not a valid move. \n"
+                            "Please try again.")
+                        click_two[0].resetClicked()
 
 ##                # Check again if another square has already been clicked
 ##                #   in case the first click was inauthentic
@@ -341,6 +379,7 @@ class ChessGame:
                                 # If same team, update message
                                 if (p.checkColor() ==
                                     choice[0].checkColor()):
+                                    print("error2222")
                                     self.board_gui.updateMessage(
                                         "That is not a valid move. \n",
                                         "Please try again.")
@@ -358,7 +397,18 @@ class ChessGame:
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
-                                print("sahil2")
+                                if valid_move:
+                                    print("sahil2")
+                                    self.board_gui.updateMessage(
+                                        "Pawn to e4.")
+                                    # sahil stuff here
+                                    # actually moving the piece to an
+                                    #   empty square
+                                    continue
+                                else:
+                                    print("here")
+                                    clicked_sqs.remove(click_two[0])
+                                    
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
