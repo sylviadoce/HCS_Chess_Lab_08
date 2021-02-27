@@ -397,7 +397,7 @@ class ChessGame:
                                     p1 = Point(x-0.5,y-0.5)
                                     p2 = Point(x+0.5,y+0.5)
                                     rect=Rectangle(p1,p2)
-                                    rect.setFill("cyan")
+                                    rect.setFill(click[0].getColor())
                                     rect.draw(self.board_gui.win)
                                     #self.board_gui.undrawPiece(piece)
                                     for sq in self.board_gui.getActiveSquares():
