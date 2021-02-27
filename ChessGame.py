@@ -27,13 +27,13 @@ class ChessGame:
         # Initialize the white (bottom-left) pawn coordinates (a2), create
         x,y = 0.5,1.5
         for i in range(8):
-            pawns[0].append(Pawn(Point(x,y),"white","pawn"))
+            pawns[0].append(Pawn(Point(x,y),"white","pawn","wp" + str(i+1)))
             x += 1
 
         # Initialize the black (top-left) pawn coordinates (a7), create
         x,y = 0.5,6.5
         for i in range(8):
-            pawns[1].append(Pawn(Point(x,y),"black","pawn"))
+            pawns[1].append(Pawn(Point(x,y),"black","pawn","bp" + str(i+1)))
             x += 1
 
         return pawns
@@ -44,12 +44,12 @@ class ChessGame:
         bishops = [[],[]]
 
         # Initialize the white bishop coordinates (c1 and f1), create
-        bishops[0].append(Bishop(Point(2.5,0.5),"white","bishop"))
-        bishops[0].append(Bishop(Point(5.5,0.5),"white","bishop"))
+        bishops[0].append(Bishop(Point(2.5,0.5),"white","bishop","wb1"))
+        bishops[0].append(Bishop(Point(5.5,0.5),"white","bishop","wb2"))
 
         # Initialize the black bishop coordinates (c8 and f8), create
-        bishops[1].append(Bishop(Point(2.5,7.5),"black","bishop"))
-        bishops[1].append(Bishop(Point(5.5,7.5),"black","bishop"))
+        bishops[1].append(Bishop(Point(2.5,7.5),"black","bishop","bb1"))
+        bishops[1].append(Bishop(Point(5.5,7.5),"black","bishop","bb1"))
 
         return bishops
 
@@ -59,12 +59,12 @@ class ChessGame:
         knights = [[],[]]
 
         # Initialize the white knight coordinates (b1 and g1), create
-        knights[0].append(Knight(Point(1.5,0.5),"white","knight"))
-        knights[0].append(Knight(Point(6.5,0.5),"white","knight"))
+        knights[0].append(Knight(Point(1.5,0.5),"white","knight","wkn1"))
+        knights[0].append(Knight(Point(6.5,0.5),"white","knight","wkn2"))
 
         # Initialize the black knight coordinates (b8 and g8), create
-        knights[1].append(Knight(Point(1.5,7.5),"black","knight"))
-        knights[1].append(Knight(Point(6.5,7.5),"black","knight"))
+        knights[1].append(Knight(Point(1.5,7.5),"black","knight","bkn1"))
+        knights[1].append(Knight(Point(6.5,7.5),"black","knight","bkn2"))
 
         return knights
 
@@ -74,12 +74,12 @@ class ChessGame:
         rooks = [[],[]]
 
         # Initialize the white rook coordinates (a1 and h1), create
-        rooks[0].append(Rook(Point(0.5,0.5),"white","rook"))
-        rooks[0].append(Rook(Point(7.5,0.5),"white","rook"))
+        rooks[0].append(Rook(Point(0.5,0.5),"white","rook","wr1"))
+        rooks[0].append(Rook(Point(7.5,0.5),"white","rook","wr1"))
 
         # Initialize the black rook coordinates (a8 and h8), create
-        rooks[1].append(Rook(Point(0.5,7.5),"black","rook"))
-        rooks[1].append(Rook(Point(7.5,7.5),"black","rook"))
+        rooks[1].append(Rook(Point(0.5,7.5),"black","rook","br1"))
+        rooks[1].append(Rook(Point(7.5,7.5),"black","rook","br2"))
 
         return rooks
 
@@ -89,10 +89,10 @@ class ChessGame:
         queens = [[],[]]
 
         # Initialize the white queen coordinates (d1), create
-        queens[0].append(Queen(Point(3.5,0.5),"white","queen"))
+        queens[0].append(Queen(Point(3.5,0.5),"white","queen","wq1"))
 
         # Initialize the black queen coordinates (d8), create
-        queens[1].append(Queen(Point(3.5,7.5),"black","queen"))
+        queens[1].append(Queen(Point(3.5,7.5),"black","queen","bq1"))
 
         return queens
 
@@ -102,10 +102,10 @@ class ChessGame:
         kings = [[],[]]
 
         # Initialize the white king coordinates (e1), create
-        kings[0].append(King(Point(4.5,0.5),"white","king"))
+        kings[0].append(King(Point(4.5,0.5),"white","king","wk1"))
 
         # Initialize the black king coordinates (e8), create
-        kings[1].append(King(Point(4.5,7.5),"black","king"))
+        kings[1].append(King(Point(4.5,7.5),"black","king","bk1"))
 
         return kings
 
@@ -356,6 +356,7 @@ class ChessGame:
                     # Check if the clicked square is occupied
                     for piece in pieces:
                         for p in piece:
+                            print("beginning",p.getPieceType(),p.checkColor())
                             # If occupied, check the piece's team
                             if (p.getLocationXY() ==
                                 click_two[0].getLocation()):
@@ -366,8 +367,8 @@ class ChessGame:
                                     self.board_gui.updateMessage(
                                         "That is not a valid move. \n"
                                         "Please try again.")
-                                    clicked_sqs[1].resetClicked()
-                                    clicked_sqs.pop(1)
+##                                    clicked_sqs[1].resetClicked()
+##                                    clicked_sqs.pop(1)
                                 # If other team, check if it's a valid move
                                 # (not putting king in check,possible move)
                                 # If so, capture the piece and remove it
@@ -384,15 +385,18 @@ class ChessGame:
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
-                                if valid_move:
+                                print("clickedsqs:", clicked_sqs)
+                                print("p right now:", p)
+                                if valid_move and (p.checkPieceID == choice[0].checkPieceID):
                                     print("sahil2")
                                     # sahil stuff here
                                     #move the piece
-                                    
-                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    print(choice[0].getPieceType(),choice[0].checkColor())
+                                    enemyPieces = choice[0].movePiece(click_two[0].getLocation(),self.getEnemyTeam())
                                     #reset square
                                     click[0].resetOccupiedSquare()
-                                    self.board_gui.drawPiece(p)
+                                    self.board_gui.drawPiece(choice[0])
+                                    print(choice[0].getPieceType(),choice[0].checkColor())
                                     x,y = choice[0].getLocationXY()
                                     p1 = Point(x-0.5,y-0.5)
                                     p2 = Point(x+0.5,y+0.5)
@@ -407,7 +411,7 @@ class ChessGame:
                                     
                                     # actually moving the piece to an
                                     #   empty square
-                                    message = (p.checkColor(),"moved",p.getPieceType(),"to",self.board_gui.locationCoordToLabel(click_two[0].getLocation()))
+                                    message = (choice[0].checkColor(),"moved",choice[0].getPieceType(),"to",self.board_gui.locationCoordToLabel(click_two[0].getLocation()))
                                     self.board_gui.updateMessage(message)
                                     
                 
@@ -415,12 +419,14 @@ class ChessGame:
                                     break
                                 else:
                                     print("here")
-                                    clicked_sqs.remove(click_two[0])
+                                    continue
+##                                    clicked_sqs.remove(click_two[0])
                                     
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
                                 # break out of the while loop
+                        break
 
         while True:
            click = self.board_gui.allClicks()

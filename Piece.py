@@ -3,7 +3,7 @@ from graphics import *
 
 class Piece:
     #works
-    def __init__(self,location,color,pieceType):
+    def __init__(self,location,color,pieceType,pieceID):
         #pieceType --> rook,bishop, pawn, etc.
         #Another way to implement this?
         self.eaten = False
@@ -12,6 +12,7 @@ class Piece:
         self.pieceType = pieceType
         self.imageUpdate()
         self.firstPawnMove = True #this will be used in getPossibleMoves
+        self.pieceID = pieceID
         
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
@@ -174,6 +175,9 @@ class Piece:
 
     def getLocationXY(self):
         return self.location.getX(),self.location.getY()
+
+    def checkPieceID(self):
+        return self.pieceID
 
 
 
