@@ -106,7 +106,7 @@ class BoardGUI:
         else:
             self.color = "white"
 
-        self.message.setText("It is " + self.color + "'s move.")
+##        self.message.setText("It is " + self.color + "'s move.")
 
     def updateMessage(self,update):
         """Sets the message to update."""
