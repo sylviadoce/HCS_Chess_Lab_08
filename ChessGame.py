@@ -147,21 +147,21 @@ class ChessGame:
                 self.board_gui.undrawPiece(pawn)
                 self.pieces[i].append(Queen(loc,colors[i],"queen"))
 
-    def getEnemyTeam(self) -> list:
+    def getEnemyTeam(self):
         if self.board_gui.checkTurnColor() == "white":
-            enemyPieces = self.pieces[1]
+            self.enemyPieces = self.pieces[1]
         else:
-            enemyPieces = self.pieces[0]
+            self.enemyPieces = self.pieces[0]
 
-        return enemyPieces
+        return self.enemyPieces
 
-    def getMyTeam(self) -> list:
+    def getMyTeam(self):
         if self.board_gui.checkTurnColor() == "white":
-            sameTeam = self.pieces[0]
+            self.sameTeam = self.pieces[0]
         else:
-            sameTeam = self.pieces[1]
+            self.sameTeam = self.pieces[1]
 
-        return sameTeam
+        return self.sameTeam
 
     def getEnemyKing(self) -> list:
         if self.board_gui.checkTurnColor() == "white":
@@ -373,6 +373,10 @@ class ChessGame:
                                 # If so, capture the piece and remove it
                                 else:
                                     print("sahil1")
+                                    valid,enemyPieces,image = piece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    for piece in enemyPieces:
+                                        if piece.getEaten() == True:
+                                            piece.remove(self.getEnemyTeam())
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
