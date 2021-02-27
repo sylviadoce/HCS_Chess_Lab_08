@@ -12,6 +12,7 @@ class Piece:
         self.pieceType = pieceType
         self.imageUpdate()
         self.firstPawnMove = True #this will be used in getPossibleMoves
+        
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
         #create a list of all possible coordinates the piece can move
@@ -33,17 +34,15 @@ class Piece:
     #call this after the user clicks on a square.
         #This will check if it is a valid move, and if it is it
         #will return True and will move the pieces accordingly.
-    def movePiece(self,pt,enemyPieces):
-        valid = self.checkValidMove(pt)
-        if valid:
-            self.location = Point(x,y)
-            self.imageUpdate(self.location)
-            self.eatPiece(enemyPieces)
-            return True,enemyPieces,self.image
-            if self.pieceType == "pawn":
-                self.firstPawnMove = False
-        else:
-            return False,enemyPieces,self.image
+    def movePiece(self,xy,enemyPieces):   
+        self.location = Point(xy[0],xy[1])
+        print(self.location)
+        #self.imageUpdate()
+        self.eatPiece(enemyPieces)
+        return enemyPieces
+        if self.pieceType == "pawn":
+            self.firstPawnMove = False
+            
 
 
     #This will find the possible spots for all pieces. (except for diagonal pawn capture)
@@ -125,6 +124,7 @@ class Piece:
     def imageUpdate(self):
         if self.eaten:
             self.location = Point(200,200)
+        #(self.image).move(self.location.getX(),self.location.getY())
         self.image = Image(self.location,self.color+self.pieceType+".png")
         return self.image
 
@@ -174,5 +174,6 @@ class Piece:
 
     def getLocationXY(self):
         return self.location.getX(),self.location.getY()
+
 
 

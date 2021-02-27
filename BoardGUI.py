@@ -119,13 +119,14 @@ class BoardGUI:
 
     def drawPiece(self,piece):
         """Draws the piece in the graphics window."""
-        
+        #pieceImg = Image(piece.getLocation(),piece.checkColor()+piece.getPieceType()+".png")
         piece.imageUpdate().draw(self.win)
+
 
     def undrawPiece(self,piece):
         """Undraws the piece in the graphics window."""
 
-        piece.imageUpdate().undraw(self.win)
+        self.drawPiece(piece).undraw(self.win)
 
     def getActiveSquares(self) -> list:
         """Returns a list of all the activated squares."""

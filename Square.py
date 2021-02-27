@@ -8,9 +8,9 @@ class Square(Button):
         x,y=center.getX(), center.getY()
         self.xmax, self.xmin = x+w, x-w
         self.ymax, self.ymin = y+h, y-h
-        p1=Point(self.xmin, self.ymin)
-        p2=Point(self.xmax, self.ymax)
-        self.rect=Rectangle(p1,p2)
+        self.p1=Point(self.xmin, self.ymin)
+        self.p2=Point(self.xmax, self.ymax)
+        self.rect=Rectangle(self.p1,self.p2)
         if (center.getX()+center.getY())%2 == 0:
             self.color = "white"
         else:
@@ -74,7 +74,8 @@ class Square(Button):
     def resetOccupiedSquare(self):
         #Call this after a piece has moved off of the square it was occupying
         self.occupied = False
-        self.rect.setFill(self.color)
+        self.rect.setFill("blue")
+        coverSquare = Rectangle(self.p1,self.p2)
         
 
 
@@ -92,6 +93,8 @@ class Square(Button):
     def getX(self):
         return self.center.getX()
 
+    def getColor(self):
+        return self.color
 
 
       
@@ -108,10 +111,8 @@ def main():
     
     point = Point(50,50)
     sq.clicked(pt)
-
     print(sq.getLocation())
     
-
 main()
 '''
 
@@ -220,4 +221,3 @@ main()
 ##    print(sq.getX())
 ##    
 ##main()
-

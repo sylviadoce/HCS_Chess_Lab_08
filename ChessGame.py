@@ -364,7 +364,7 @@ class ChessGame:
                                     choice[0].checkColor()):
                                     print("error2222")
                                     self.board_gui.updateMessage(
-                                        "That is not a valid move. \n",
+                                        "That is not a valid move. \n"
                                         "Please try again.")
                                     clicked_sqs[1].resetClicked()
                                     clicked_sqs.pop(1)
@@ -373,10 +373,10 @@ class ChessGame:
                                 # If so, capture the piece and remove it
                                 else:
                                     print("sahil1")
-                                    valid,enemyPieces,image = piece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
                                     for piece in enemyPieces:
                                         if piece.getEaten() == True:
-                                            piece.remove(self.getEnemyTeam())
+                                            self.getEnemyTeam.remove(piece)
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
@@ -386,12 +386,31 @@ class ChessGame:
                             else:
                                 if valid_move:
                                     print("sahil2")
-                                    self.board_gui.updateMessage(
-                                        "Pawn to e4.")
                                     # sahil stuff here
+                                    #move the piece
+                                    
+                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    #reset square
+                                    click[0].resetOccupiedSquare()
+                                    self.board_gui.drawPiece(p)
+                                    x,y = choice[0].getLocationXY()
+                                    p1 = Point(x-0.5,y-0.5)
+                                    p2 = Point(x+0.5,y+0.5)
+                                    rect=Rectangle(p1,p2)
+                                    rect.setFill("cyan")
+                                    rect.draw(self.board_gui.win)
+                                    #self.board_gui.undrawPiece(piece)
+                                    for sq in self.board_gui.getActiveSquares():
+                                        sq.deactivate()
+                                    #self.board_gui.drawPiece(p)
+                                    
+                                    
                                     # actually moving the piece to an
                                     #   empty square
-                                    continue
+                                    self.board_gui.updateMessage(
+                                        "Pawn to e4.\n")
+                                    
+                                    break
                                 else:
                                     print("here")
                                     clicked_sqs.remove(click_two[0])
