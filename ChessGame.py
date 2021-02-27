@@ -407,8 +407,10 @@ class ChessGame:
                                     
                                     # actually moving the piece to an
                                     #   empty square
-                                    self.board_gui.updateMessage(
-                                        "Pawn to e4.\n")
+                                    message = (p.checkColor(),"moved",p.getPieceType(),"to",self.board_gui.locationCoordToLabel(click_two[0].getLocation()))
+                                    self.board_gui.updateMessage(message)
+                                    
+                
                                     
                                     break
                                 else:
