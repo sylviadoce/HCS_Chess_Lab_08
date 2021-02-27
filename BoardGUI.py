@@ -71,23 +71,21 @@ class BoardGUI:
     def locationCoordToLabel(self,location) -> str:
         """Converts a piece's coordinate to its alphabetized and
             numeric label."""
-        print("loc in gui:", location)
+        
         loc_label = ""
         coord = 0.5
         # Associate the y/x coordinate with its respective letter/number
         print(location)
         for y in range(8):
             #print(location.getY())
-            if location[0] == coord:
-                print(location[1], coord, y)
-                loc_label += str(self.board_label[0][y])
+            if location[1] == coord:
+                loc_label += str(self.board_label[0][y+1])
                 break
             coord += 1
         coord = 0.5
         for x in range(8):
-            if location[1] == coord:
-                print(location[0], coord, x)
-                loc_label += str(self.board_label[1][x])
+            if location[0] == coord:
+                loc_label += str(self.board_label[1][x-1])
                 break
             coord += 1
 
@@ -106,7 +104,7 @@ class BoardGUI:
         else:
             self.color = "white"
 
-##        self.message.setText("It is " + self.color + "'s move.")
+        self.message.setText("It is " + self.color + "'s move.")
 
     def updateMessage(self,update):
         """Sets the message to update."""

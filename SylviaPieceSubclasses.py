@@ -10,7 +10,11 @@ class Pawn(Piece):
             to the pawn's x,y location."""
         numSpaces = 1
         # Includes the special eating diagonals and two-y beginning move
-        listDir = [[1,1],[-1,1],[0,1],[0,2]]
+        if self.color == "white":
+            listDir = [[1,1],[-1,1],[0,1],[0,2]]
+
+        else:
+            listDir = [[-1,-1],[1,-1],[0,-1],[0,-2]]
 
         return listDir, numSpaces
 

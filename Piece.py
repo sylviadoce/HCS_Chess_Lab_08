@@ -3,7 +3,7 @@ from graphics import *
 
 class Piece:
     #works
-    def __init__(self,location,color,pieceType,pieceID):
+    def __init__(self,location,color,pieceType,ID):
         #pieceType --> rook,bishop, pawn, etc.
         #Another way to implement this?
         self.eaten = False
@@ -11,8 +11,8 @@ class Piece:
         self.color = color
         self.pieceType = pieceType
         self.imageUpdate()
+        self.ID = ID
         self.firstPawnMove = True #this will be used in getPossibleMoves
-        self.pieceID = pieceID
         
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
@@ -21,9 +21,10 @@ class Piece:
         self.possibleSpots(listDir,numSpaces,enemyTeam,myTeam)
         #remove spots that are off the board
         #removes spot that will put their own king in check
-        print(self.pieceType)
+        #print(self.pieceType)
         if avoidCheck != "nocheck":
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
+            print(self.pieceType,self.color,"Piece being moved")
         
         #print(self.spots,"First")
         #self.delCornerSpots()
@@ -37,12 +38,13 @@ class Piece:
         #will return True and will move the pieces accordingly.
     def movePiece(self,xy,enemyPieces):   
         self.location = Point(xy[0],xy[1])
-        print(self.location)
+        #print(self.location)
         #self.imageUpdate()
         self.eatPiece(enemyPieces)
-        return enemyPieces
         if self.pieceType == "pawn":
             self.firstPawnMove = False
+        return enemyPieces
+        
             
 
 
@@ -55,7 +57,7 @@ class Piece:
         self.spots = []
         validPawnMove = True #Use this to check if the pawn can go 2 spaces ahead - is there a piece in front of it?
         if self.firstPawnMove == False:
-            listDir.remove([0,2])
+            listDir.remove(listDir[3])
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
         for direction in listDir:
             x,y = self.location.getX(),self.location.getY()
@@ -65,32 +67,46 @@ class Piece:
             for i in range(1,(int(numSpaces)+1)):
                 x += direction[0]
                 y = direction[1] + y
+                #print(68)
                 if onAPiece or x<0 or y<0 or x>7 or y>7:
+                    #print("x",x,"y",y,self.pieceType,self.color)
+                    #print("onAPiece",onAPiece)
                     break
                 #elif x <0 or y<0 or x>0 or y>0: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
                 for piece in enemyTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
+                        #print(75)
                         if self.pieceType == "pawn":
-                            if direction == [1,1] or direction == [-1,1]:
+                            absDir = [abs(direction[0]),abs(direction[1])]
+                            if absDir == [1,1]:
                                 self.spots.append(Point(x,y))
-                            elif direction == [0,1]:
+                            elif absDir == [0,1]:
                                 validPawnMove = False
                                 #This is used to prevent checking direction [0,2]
 
                         onAPiece = True
                 for piece in sameTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
+                        #print(86)
                         onAPiece = True
+
                         
-                if not onAPiece:
-                    if not (self.pieceType == "pawn" and (direction == [1,1] or direction == [-1,1])):
-                        self.spots.append(Point(x,y))
+                if onAPiece == False:
+                    #print(90)
+                    if self.pieceType == "pawn":
+                        if direction[0] == 0:
+                            #print(93)
+                            self.spots.append(Point(x,y))
+                    else: self.spots.append(Point(x,y))    
                         
     def eatPiece(self,enemyPieces):
         for piece in enemyPieces:
             if piece.getLocation() == self.location:
+                print(piece.getPieceType(),piece.checkColor(),"has been eaten")
+                print(piece.checkColor(),piece.getLocation(),"enemy")
+                print(self.color,self.location)
                 piece.isEaten()
 
     #use this for updating message box 
@@ -177,7 +193,5 @@ class Piece:
         return self.location.getX(),self.location.getY()
 
     def checkPieceID(self):
-        return self.pieceID
-
-
+        return self.ID
 

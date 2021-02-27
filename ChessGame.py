@@ -246,20 +246,20 @@ class ChessGame:
                 # Set the clicked square status to clicked (True)
                 click[0].setClicked()
 
-                print("before this clicked_sqs",clicked_sqs)
+                #print("before this clicked_sqs",clicked_sqs)
 
                 # Check if another square has already been clicked
                 for square in self.board_gui.squares:
                     # For first move, bypass conditionals
                     if choice == [] and square.checkClicked():
-                        print("first move")
+                        #print("first move")
                         clicked_sq += 1
                         clicked_sqs.append(square)
                         break
                     # Remove any invalid second clicks
                     elif (square.checkClicked() and (square.getLocation()
                         != choice[0].getLocation())):
-                        print("invalid other sq clicked")
+                        #print("invalid other sq clicked")
                         # Remove the invalid square
                         clicked_sqs.remove(square)
                         # If one of the possible spots
@@ -273,15 +273,15 @@ class ChessGame:
 
                 # If choosing a piece (one square click)
                 if clicked_sq == 1:
-                    print("one click")
-                    for piece in pieces:
-                        for p in piece:
-                            print("loop")
+                    #print("one click")
+                    for lstPiece in pieces:
+                        for p in lstPiece:
+                            #print("loop")
                             pop_sq = False
                             on_piece = False
                             move_on = False
-                            print(p.checkPieceID)
-                            print(click[0].getLocation(),p.getLocationXY())
+                            #print(p.checkPieceID)
+                            #print(click[0].getLocation(),p.getLocationXY())
                             # Check if a piece is on the square
                             if (click[0].getLocation() == p.getLocationXY()):
                                 # If wrong team, update message
@@ -304,7 +304,16 @@ class ChessGame:
                                         self.getEnemyKing(),
                                         self.getMyTeam(),
                                         self.getEnemyTeam(),"y")
-                                    print(spots) 
+                                    selectedPiece = p
+                                    #print(p.checkColor,p.getPieceType(),"Piece being moved")
+                                    #for piece in [self.getMyKing(),
+                                        #self.getEnemyKing()]:
+                                        #print(piece.getPieceType(),piece.checkColor())
+                                    #for piece in self.getMyTeam():
+                                        #print(piece.getPieceType(),piece.checkColor())
+                                    #for piece in self.getEnemyTeam():
+                                        #print(piece.getPieceType(),piece.checkColor())
+                                    #print(spots) 
                                     # Check if the piece has possible spots
                                     if spots != []:
                                         self.board_gui.updateMessage(
@@ -415,10 +424,10 @@ class ChessGame:
                                 # If so, capture the piece and remove it
                                 else:
                                     print("sahil1")
-                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    enemyPieces = selectedPiece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
                                     for piece in enemyPieces:
                                         if piece.getEaten() == True:
-                                            self.getEnemyTeam.remove(piece)
+                                            self.getEnemyTeam().remove(piece)
                                     # Sahil's stuff here?
                                     # actually moving the piece
                                     # make sure to update message
@@ -426,22 +435,21 @@ class ChessGame:
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
-                                if valid_move and (p.checkPieceID == choice[0].checkPieceID):
+                                print("validMove",valid_move)
+                                print(p.checkPieceID)
+                                print(choice[0].checkPieceID)
+                                if valid_move: #and (p.checkPieceID == choice[0].checkPieceID):
                                     print("sahil2")
                                     # sahil stuff here
                                     #move the piece
-                                    x,y = p.getLocationXY()
-                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    x,y = selectedPiece.getLocationXY()
+                                    enemyPieces = selectedPiece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
                                     #reset square
                                     click[0].resetOccupiedSquare()
-                                    self.board_gui.drawPiece(p)
+                                    self.board_gui.drawPiece(selectedPiece)
                                     print("CHOICEXY:",x,y)
                                     print("CHOICE LOC:", choice[0].getLocationXY())
-                                    p1 = Point(x-0.5,y-0.5)
-                                    p2 = Point(x+0.5,y+0.5)
-                                    rect=Rectangle(p1,p2)
-                                    rect.setFill(click[0].getColor())
-                                    rect.draw(self.board_gui.win)
+                                    
                                     #self.board_gui.undrawPiece(piece)
                                     for sq in self.board_gui.getActiveSquares():
                                         sq.deactivate()
@@ -453,10 +461,10 @@ class ChessGame:
                                     self.board_gui.updateTurn()
                                     #REPLACE W AFTERMOVEMESSAGE FUNCTION
                                     message = (
-                                        p.checkColor(),"moved",
-                                        p.getPieceType(),"to",
+                                        selectedPiece.checkColor(),"moved",
+                                        selectedPiece.getPieceType(),"to",
                                         self.board_gui.locationCoordToLabel(
-                                            p.getLocationXY()))
+                                            selectedPiece.getLocationXY()))
                                     self.board_gui.updateMessage(message)
                                     for sq in self.board_gui.squares:
                                         sq.resetClicked()
@@ -468,7 +476,21 @@ class ChessGame:
                                     print("here")
                                     continue
 ##                                    clicked_sqs.remove(click_two[0])
-                                    
+                                    x,y = p.getLocationXY()
+                                    #enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    #reset square
+                                    #click[0].resetOccupiedSquare()
+                                    self.board_gui.drawPiece(p)
+                                    #print("CHOICEXY:",x,y)
+                                    #print("CHOICE LOC:", choice[0].getLocationXY())
+                                    p1 = Point(x-0.5,y-0.5)
+                                    p2 = Point(x+0.5,y+0.5)
+                                    rect=Rectangle(p1,p2)
+                                    rect.setFill(click[0].getColor())
+                                    rect.draw(self.board_gui.win)
+                                    #self.board_gui.undrawPiece(piece)
+                                    for sq in self.board_gui.getActiveSquares():
+                                        sq.deactivate()
                                 # Sahil's stuff here?
                                 # actually moving the piece
                                 # make sure to update message
