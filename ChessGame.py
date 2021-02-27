@@ -192,6 +192,34 @@ class ChessGame:
                     
                     return myKing
 
+##    def afterMoveMessage(self,p,capture:bool,capture_id#HOW TO INCORPORATE?):
+##        if checkmate: #DO
+##            message = str(p.checkColor()).capitalize(),"moved",
+##            p.getPieceType(),"to",
+##            self.board_gui.locationCoordToLabel(p.getLocationXY()),
+##            "-- Checkmate!" )
+##        elif check: #DO
+##            message = str(p.checkColor()).capitalize() + " moved "
+##            + p.getPieceType() " to " +
+##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+##            "\n (Check) -- It is now \n" +
+##            self.board_gui.updateTurn().capitalize() + "'s move.")
+##        elif capture: #DO
+##            message = str(p.checkColor()).capitalize() + "'s "
+##            + p.getPieceType() "captured \n" +
+##            self.board_gui.updateTurn().capitalize() + "'s " +
+##            capture_id + " at "
+##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+##            "\n -- It is now \n" +
+##            self.board_gui.updateTurn().capitalize() + "'s move.")
+##        else:
+##            message = str(p.checkColor()).capitalize() + " moved "
+##            + p.getPieceType() " to " +
+##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+##            "\n -- It is now \n" +
+##            self.board_gui.updateTurn().capitalize() + "'s move.")
+            
+
     def main(self):
         """Runs the game, using functions to move the pieces."""
 
@@ -251,6 +279,9 @@ class ChessGame:
                             print("loop")
                             pop_sq = False
                             on_piece = False
+                            move_on = False
+                            print(p.checkPieceID)
+                            print(click[0].getLocation(),p.getLocationXY())
                             # Check if a piece is on the square
                             if (click[0].getLocation() == p.getLocationXY()):
                                 # If wrong team, update message
@@ -262,6 +293,7 @@ class ChessGame:
                                         self.board_gui.checkTurnColor() +
                                         " piece!")
                                     pop_sq = True
+                                    move_on = True
                                     break
                                 # If right team, get possible moves
                                 else:
@@ -288,6 +320,7 @@ class ChessGame:
                                                 if x == sq.getLocation()[0] and y == sq.getLocation()[1]:
                                                     sq.activate()
                                         choice.append(p)
+                                        move_on = True
                                         break
                                     # If not, update message
                                     else:
@@ -296,9 +329,11 @@ class ChessGame:
                                             "any legal moves -- \n"
                                             "please pick another piece.")
                                         pop_sq = True
+                                        move_on = True
                                         break
                         # Get out of second for loop!!!
-                        break
+                        if move_on:
+                            break
 
                     print("out of for loops")
 
@@ -415,15 +450,16 @@ class ChessGame:
                                     
                                     # actually moving the piece to an
                                     #   empty square
+                                    self.board_gui.updateTurn()
+                                    #REPLACE W AFTERMOVEMESSAGE FUNCTION
                                     message = (
                                         p.checkColor(),"moved",
                                         p.getPieceType(),"to",
                                         self.board_gui.locationCoordToLabel(
-                                            choice[0].getLocationXY()))
+                                            p.getLocationXY()))
                                     self.board_gui.updateMessage(message)
                                     for sq in self.board_gui.squares:
                                         sq.resetClicked()
-                                    self.board_gui.updateTurn()
                                     
                 
                                     
