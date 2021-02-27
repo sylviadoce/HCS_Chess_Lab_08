@@ -198,8 +198,8 @@ class ChessGame:
         # Create the pieces
         pieces = self.createPieces()
 
-        # Set up a list to store the authentic click (choosing a piece)
-        choice = []
+##        # Set up a list to store the authentic click (choosing a piece)
+##        choice = []
 
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
@@ -207,6 +207,9 @@ class ChessGame:
             # Set up a list and counter to track clicked squares
             clicked_sqs = []
             clicked_sq = 0
+
+            # Set up a list to store the authentic click (choosing a piece)
+            choice = []
 
             pop_sq = False
             
@@ -224,6 +227,7 @@ class ChessGame:
                         print("first move")
                         clicked_sq += 1
                         clicked_sqs.append(square)
+                        break
                     # Remove any invalid second clicks
                     elif (square.checkClicked() and (square.getLocation()
                         != choice[0].getLocation())):
@@ -252,6 +256,7 @@ class ChessGame:
                                 # If wrong team, update message
                                 if (p.checkColor() !=
                                     self.board_gui.checkTurnColor()):
+                                    print("place1")
                                     self.board_gui.updateMessage(
                                         "Please click on a \n" +
                                         self.board_gui.checkTurnColor() +
@@ -299,6 +304,7 @@ class ChessGame:
 
                     # Check if it is the right team's piece 
                     if on_piece == False:
+                        print("place2")
                         self.board_gui.updateMessage(
                             "Please click on a \n" +
                             self.board_gui.checkTurnColor() +
@@ -385,19 +391,17 @@ class ChessGame:
                             # If empty, check if it's a valid move
                             # (not putting king in check,possible move)
                             else:
-                                print("clickedsqs:", clicked_sqs)
-                                print("p right now:", p)
                                 if valid_move and (p.checkPieceID == choice[0].checkPieceID):
                                     print("sahil2")
                                     # sahil stuff here
                                     #move the piece
-                                    print(choice[0].getPieceType(),choice[0].checkColor())
-                                    enemyPieces = choice[0].movePiece(click_two[0].getLocation(),self.getEnemyTeam())
+                                    x,y = p.getLocationXY()
+                                    enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
                                     #reset square
                                     click[0].resetOccupiedSquare()
-                                    self.board_gui.drawPiece(choice[0])
-                                    print(choice[0].getPieceType(),choice[0].checkColor())
-                                    x,y = choice[0].getLocationXY()
+                                    self.board_gui.drawPiece(p)
+                                    print("CHOICEXY:",x,y)
+                                    print("CHOICE LOC:", choice[0].getLocationXY())
                                     p1 = Point(x-0.5,y-0.5)
                                     p2 = Point(x+0.5,y+0.5)
                                     rect=Rectangle(p1,p2)
@@ -411,8 +415,15 @@ class ChessGame:
                                     
                                     # actually moving the piece to an
                                     #   empty square
-                                    message = (choice[0].checkColor(),"moved",choice[0].getPieceType(),"to",self.board_gui.locationCoordToLabel(click_two[0].getLocation()))
+                                    message = (
+                                        p.checkColor(),"moved",
+                                        p.getPieceType(),"to",
+                                        self.board_gui.locationCoordToLabel(
+                                            choice[0].getLocationXY()))
                                     self.board_gui.updateMessage(message)
+                                    for sq in self.board_gui.squares:
+                                        sq.resetClicked()
+                                    self.board_gui.updateTurn()
                                     
                 
                                     
