@@ -77,15 +77,16 @@ class Piece:
                                 self.spots.append(Point(x,y))
                             elif direction == [0,1]:
                                 validPawnMove = False
+                                #This is used to prevent checking direction [0,2]
 
                         onAPiece = True
                 for piece in sameTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
-                        print("76")
                         onAPiece = True
                         
                 if not onAPiece:
-                    self.spots.append(Point(x,y))
+                    if not (self.pieceType == "pawn" and (direction == [1,1] or direction == [-1,1])):
+                        self.spots.append(Point(x,y))
                         
     def eatPiece(self,enemyPieces):
         for piece in enemyPieces:
