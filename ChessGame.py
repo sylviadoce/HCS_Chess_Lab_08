@@ -16,8 +16,6 @@ class ChessGame:
 
         self.checkmate = False
 
-        self.check = False
-
         # Getting either the white team (0) or black team (1)
         self.teamnum = [0,1]
 
@@ -229,16 +227,13 @@ class ChessGame:
         # Change team turns, display the correct after-move message
         self.board_gui.updateTurn()
 
-    def getCheck(self) -> bool:
-        return self.check
-
     def afterMoveMessage(self,p,captured):
         if self.checkmate: #DO
             message = (p.checkColor().capitalize()," moved \n",
             p.getPieceType() + " to " +
             self.board_gui.locationCoordToLabel(p.getLocationXY()) +
             "-- \n\n Checkmate!")
-        elif self.getCheck():
+        elif p.getCheck():
             message = (p.checkColor().capitalize() + " moved \n"
             + p.getPieceType() + " to " +
             self.board_gui.locationCoordToLabel(p.getLocationXY()) +
