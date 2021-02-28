@@ -23,8 +23,9 @@ class Piece:
         #removes spot that will put their own king in check
         #print(self.pieceType)
         if avoidCheck != "nocheck":
+            print("spots before avoidCheck",self.spots)
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
-            print(self.pieceType,self.color,"Piece being moved")
+            #print(self.pieceType,self.color,"Piece being moved")
         
         #print(self.spots,"First")
         #self.delCornerSpots()
@@ -150,16 +151,17 @@ class Piece:
     #for king - prevents him from going to squares that put himself in check.
     def avoidOwnCheck(self, myKing,enemyKing,myTeam,enemyTeam):
         kingX, kingY = myKing.getLocation().getX(),myKing.getLocation().getY()
-        myTeam.append(self) #How to make a list append the object that it is in?
+        #myTeam.append(self) #How to make a list append the object that it is in?
         self.currentLocation = self.location
         for spot in self.spots:
             self.location = spot
             for piece in enemyTeam:
                 listDir,numSpaces = piece.calcListDirections()
-                possibleSpots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
-                if (self.currentLocation == self.location) and (myKing.getPosition() in possibleSpots):
+                possibleEnemyMoves = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
+                for pos in possibleEnemyMoves:
+                    if kingX == pos.getX() and kingY == pos.getY():
                     #This checks if the the king is in check without moving any of the pieces.
-                    spot.remove(self.spots) #find correct notation
+                        self.spots.remove(spot) #find correct notation
         self.location = self.currentLocation            
                     
             #check that if the piece's location is at one of these spots, does myKing become in check?
