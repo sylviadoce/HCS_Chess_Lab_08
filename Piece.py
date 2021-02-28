@@ -28,7 +28,7 @@ class Piece:
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
             print("spots after avoidCheck",self.spots)
             #print(self.pieceType,self.color,"Piece being moved")
-            self.calcCheckMate()
+##            self.calcCheckMate()
         #print(self.spots,"First")
         #self.delCornerSpots()
         #self.removeOffBoardSpots()

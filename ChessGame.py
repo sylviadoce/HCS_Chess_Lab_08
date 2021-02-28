@@ -228,7 +228,7 @@ class ChessGame:
         self.board_gui.updateTurn()
 
     def afterMoveMessage(self,p,captured):
-        if p.getCheckmate():
+        if p.getCheckMate():
             message = (p.checkColor().capitalize()," moved \n",
             p.getPieceType() + " to " +
             self.board_gui.locationCoordToLabel(p.getLocationXY()) +
@@ -362,7 +362,7 @@ class ChessGame:
                     self.afterMoveMessage(selectedPiece,captured)
                 else:
                     self.errorMessage(2)
-                self.checkmate = click[0].getCheckmate()
+                self.checkmate = selectedPiece.getCheckMate()
                     
         # Quit the program if the quit button is clicked
         self.checkQuit()
