@@ -13,6 +13,7 @@ class Piece:
         self.imageUpdate()
         self.ID = ID
         self.firstPawnMove = True #this will be used in getPossibleMoves
+        self.checkmate = False
         
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
@@ -27,7 +28,7 @@ class Piece:
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
             print("spots after avoidCheck",self.spots)
             #print(self.pieceType,self.color,"Piece being moved")
-        
+            self.calcCheckMate()
         #print(self.spots,"First")
         #self.delCornerSpots()
         #self.removeOffBoardSpots()
@@ -217,6 +218,20 @@ class Piece:
     #        else: return False
                     
 
+
+    def calcCheckMate(self,myKing,enemyKing,myTeam,enemyPieces):
+        for p in myTeam:
+            spots = p.getPossibleMoves(myKing,enemyKing,myTeam,enemyTeam,"y")
+            if spots == []:
+                noMoves = True
+            else:
+                noMoves = False
+                break
+        if noMoves = True:
+            for piece in myTeam:
+                piece.setCheckMate()
+            
+    
     def getEaten(self):
         return (self.eaten)
 
@@ -241,3 +256,8 @@ class Piece:
     def checkPieceID(self):
         return self.ID
 
+    def setCheckMate(self):
+        self.checkmate = True
+
+    def getCheckMate(self):
+        return self.checkmate
