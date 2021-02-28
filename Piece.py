@@ -28,7 +28,7 @@ class Piece:
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
             print("spots after avoidCheck",self.spots)
             #print(self.pieceType,self.color,"Piece being moved")
-            self.calcCheckMate()
+            #self.calcCheckMate()
         #print(self.spots,"First")
         #self.delCornerSpots()
         #self.removeOffBoardSpots()
@@ -180,6 +180,7 @@ class Piece:
                         if currentLocation == spot:
                             for p in myTeam:
                                 p.setCheck()
+                                print("king is under check")
                                 numChecks +=1                                
                         else: removeSpots.append(spot) #find correct notation
                     elif self.pieceType == "king":
@@ -190,6 +191,12 @@ class Piece:
                             if spot not in removeSpots:
                                 if currentLocation != spot:
                                     removeSpots.append(spot)
+                                if currentLocation == spot:
+                                    for p in myTeam:
+                                        p.setCheck()
+                                        print("king is under check")
+                                        numChecks +=1   
+                        
                             
         removeSpots.append(currentLocation)
         if numChecks == 0:
@@ -256,8 +263,8 @@ class Piece:
     def checkPieceID(self):
         return self.ID
 
-    def setCheckMate(self):
-        self.checkmate = True
+    #def setCheckMate(self):
+        #self.checkmate = True
 
-    def getCheckMate(self):
-        return self.checkmate
+    #def getCheckMate(self):
+        #return self.checkmate
