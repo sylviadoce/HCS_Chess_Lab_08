@@ -27,13 +27,13 @@ class ChessGame:
         # Initialize the white (bottom-left) pawn coordinates (a2), create
         x,y = 0.5,1.5
         for i in range(8):
-            pawns[0].append(Pawn(Point(x,y),"white","pawn","wp" + str(i+1)))
+            pawns[0].append(Pawn(Point(x,y),"white","pawn","wp"+str(i+1)))
             x += 1
 
         # Initialize the black (top-left) pawn coordinates (a7), create
         x,y = 0.5,6.5
         for i in range(8):
-            pawns[1].append(Pawn(Point(x,y),"black","pawn","bp" + str(i+1)))
+            pawns[1].append(Pawn(Point(x,y),"black","pawn","bp"+str(i+1)))
             x += 1
 
         return pawns
@@ -163,6 +163,13 @@ class ChessGame:
 
         return self.sameTeam
 
+    def removePiece(self,piece):
+        if piece.checkColor() == "white":
+            self.pieces[0].remove(piece)
+
+        else:
+            self.pieces[1].remove(piece)
+            
     def getEnemyKing(self) -> list:
         if self.board_gui.checkTurnColor() == "white":
             for bpiece in self.pieces[1]:
@@ -226,284 +233,144 @@ class ChessGame:
         # Create the pieces
         pieces = self.createPieces()
 
-##        # Set up a list to store the authentic click (choosing a piece)
-##        choice = []
+        # Set up a list to store the authentic click (choosing a piece)
+        choice = []
 
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
-            print("while loop")
-            # Set up a list and counter to track clicked squares
-            clicked_sqs = []
-            clicked_sq = 0
+            valid_move = False
 
-            # Set up a list to store the authentic click (choosing a piece)
-            choice = []
-
-            pop_sq = False
-            
+            # Expect a click in the graphics window
             click = self.board_gui.allClicks()
-            if click[1] == "square":
-                # Set the clicked square status to clicked (True)
-                click[0].setClicked()
 
-                #print("before this clicked_sqs",clicked_sqs)
+            # If the click is not on a square, loop
+            if click[1] != "square":
+                continue
+            
+            # Check if clicktwo is False (choosing a piece) or
+                # True (placing a valid piece)
+            clicktwo = False
+            for sq in self.board_gui.squares:
+                if sq.checkActive():
+                    print("clicktwo is True")
+                    clicktwo = True
+                    valid_move = True
+                    break
 
-                # Check if another square has already been clicked
-                for square in self.board_gui.squares:
-                    # For first move, bypass conditionals
-                    if choice == [] and square.checkClicked():
-                        #print("first move")
-                        clicked_sq += 1
-                        clicked_sqs.append(square)
-                        break
-                    # Remove any invalid second clicks
-                    elif (square.checkClicked() and (square.getLocation()
-                        != choice[0].getLocation())):
-                        #print("invalid other sq clicked")
-                        # Remove the invalid square
-                        clicked_sqs.remove(square)
-                        # If one of the possible spots
-                        if square.checkActive():
-                            print("adding here")
-                            clicked_sq += 1
-                            clicked_sqs.append(square)
-                        
-
-                print("after this clicked_sqs",clicked_sqs)
-
-                # If choosing a piece (one square click)
-                if clicked_sq == 1:
-                    #print("one click")
-                    for lstPiece in pieces:
-                        for p in lstPiece:
-                            #print("loop")
-                            pop_sq = False
-                            on_piece = False
-                            move_on = False
-                            #print(p.checkPieceID)
-                            #print(click[0].getLocation(),p.getLocationXY())
-                            # Check if a piece is on the square
-                            if (click[0].getLocation() == p.getLocationXY()):
-                                # If wrong team, update message
-                                if (p.checkColor() !=
-                                    self.board_gui.checkTurnColor()):
-                                    print("place1")
-                                    self.board_gui.updateMessage(
-                                        "Please click on a \n" +
-                                        self.board_gui.checkTurnColor() +
-                                        " piece!")
-                                    pop_sq = True
-                                    move_on = True
-                                    break
-                                # If right team, get possible moves
-                                else:
-                                    print("over here")
-                                    on_piece = True
-                                    spots = p.getPossibleMoves(
-                                        self.getMyKing(),
-                                        self.getEnemyKing(),
-                                        self.getMyTeam(),
-                                        self.getEnemyTeam(),"y")
-                                    selectedPiece = p
-                                    #print(p.checkColor,p.getPieceType(),"Piece being moved")
-                                    #for piece in [self.getMyKing(),
-                                        #self.getEnemyKing()]:
-                                        #print(piece.getPieceType(),piece.checkColor())
-                                    #for piece in self.getMyTeam():
-                                        #print(piece.getPieceType(),piece.checkColor())
-                                    #for piece in self.getEnemyTeam():
-                                        #print(piece.getPieceType(),piece.checkColor())
-                                    #print(spots) 
-                                    # Check if the piece has possible spots
-                                    if spots != []:
-                                        self.board_gui.updateMessage(
-                                            "Please select a move \n"
-                                            "from the indicated \n"
-                                            "options")
-                                        on_piece = True
-                                        # this is the authentic scenario
-                                        # Activate possible spots
-                                        for spot in spots:
-                                            for sq in self.board_gui.squares:
-                                                x,y = spot.getX(),spot.getY()
-                                                if x == sq.getLocation()[0] and y == sq.getLocation()[1]:
-                                                    sq.activate()
-                                        choice.append(p)
-                                        move_on = True
-                                        break
-                                    # If not, update message
-                                    else:
-                                        self.board_gui.updateMessage(
-                                            "That piece does not have \n"
-                                            "any legal moves -- \n"
-                                            "please pick another piece.")
-                                        pop_sq = True
-                                        move_on = True
-                                        break
-                        # Get out of second for loop!!!
-                        if move_on:
-                            break
-
-                    print("out of for loops")
-
-                    # Check if it is the right team's piece 
-                    if on_piece == False:
-                        print("place2")
-                        self.board_gui.updateMessage(
-                            "Please click on a \n" +
-                            self.board_gui.checkTurnColor() +
-                            " piece!")
-                        pop_sq = True
-                if pop_sq:
-                    print("go over here to remove!")
-                    clicked_sqs[0].resetClicked()
-                    clicked_sqs.pop(0)
-
-                print("before clicked_sqs:", clicked_sqs)
-
-                #### SECOND CLICK STUFF - AFTER ONE VALID CLICK ####
-
-                # Expect a second click that is a square
-                click_two = self.board_gui.allClicks()
-                if click_two[1] != "square" or not click_two[0].checkActive():
-                    print("not an option")
-                    continue
-
-                print("active squares: ", self.board_gui.getActiveSquares())
-                # If the square is active, append it to the list of clicks
-                for sq in self.board_gui.getActiveSquares():
-                    if sq.getLocation() == click_two[0].getLocation():
-                        print("clicking on an active sq")
-                        clicked_sqs.append(click_two[0])
-                        clicked_sq += 1
-                        valid_move = True
-                        break
-                    # If not an active square, display error message
-                    else:
-                        print("error1111")
-                        valid_move = False
-                        self.board_gui.updateMessage(
-                            "That is not a valid move. \n"
-                            "Please try again.")
-                        click_two[0].resetClicked()
-
-##                # Check again if another square has already been clicked
-##                #   in case the first click was inauthentic
-##                for square in self.board_gui.squares:
-##                    if square.checkClicked():
-##                        for i in clicked_sqs:
-##                            if i not in clicked_sqs:
-##                                print("checking clicks correctly")
-##                                clicked_sq += 1
-##                                clicked_sqs.append(square)
-
-                print("after clicked_sqs:", clicked_sqs)
-                print("after counter:", clicked_sq)
-                
-                # If placing a piece (already one authentic square click)
-                if clicked_sq == 2:
-                    print("2 clicks!!")
-                    # Check if the clicked square is occupied
-                    for piece in pieces:
-                        for p in piece:
-                            print("beginning",p.getPieceType(),p.checkColor())
-                            # If occupied, check the piece's team
-                            if (p.getLocationXY() ==
-                                click_two[0].getLocation()):
-                                # If same team, update message
-                                if (p.checkColor() ==
-                                    choice[0].checkColor()):
-                                    print("error2222")
-                                    self.board_gui.updateMessage(
-                                        "That is not a valid move. \n"
-                                        "Please try again.")
-##                                    clicked_sqs[1].resetClicked()
-##                                    clicked_sqs.pop(1)
-                                # If other team, check if it's a valid move
-                                # (not putting king in check,possible move)
-                                # If so, capture the piece and remove it
-                                else:
-                                    print("sahil1")
-                                    enemyPieces = selectedPiece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
-                                    for piece in enemyPieces:
-                                        if piece.getEaten() == True:
-                                            self.getEnemyTeam().remove(piece)
-                                    # Sahil's stuff here?
-                                    # actually moving the piece
-                                    # make sure to update message
-                                    # BREAK OUT OF THE WHILE LOOP
-                            # If empty, check if it's a valid move
-                            # (not putting king in check,possible move)
+            # clicktwo is False (choosing a piece)
+            if not clicktwo:
+                #print("one click")
+                for lstPiece in pieces:
+                    for p in lstPiece:
+                        invalid = False
+                        # Check if a piece is on the square
+                        if (click[0].getLocation() == p.getLocationXY()):
+                            # If wrong team, update message
+                            if (p.checkColor() !=
+                                self.board_gui.checkTurnColor()):
+                                print("place1")
+                                self.board_gui.updateMessage(
+                                    "Please click on a \n" +
+                                    self.board_gui.checkTurnColor() +
+                                    " piece!")
+                                invalid = True
+                                break
+                            # If right team, get possible moves
                             else:
-                                print("validMove",valid_move)
-                                print(p.checkPieceID)
-                                print(choice[0].checkPieceID)
-                                if valid_move: #and (p.checkPieceID == choice[0].checkPieceID):
-                                    print("sahil2")
-                                    # sahil stuff here
-                                    #move the piece
-                                    x,y = selectedPiece.getLocationXY()
-                                    enemyPieces = selectedPiece.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
-                                    #reset square
-                                    click[0].resetOccupiedSquare()
-                                    self.board_gui.drawPiece(selectedPiece)
-                                    print("CHOICEXY:",x,y)
-                                    print("CHOICE LOC:", choice[0].getLocationXY())
-                                    
-                                    #self.board_gui.undrawPiece(piece)
-                                    for sq in self.board_gui.getActiveSquares():
-                                        sq.deactivate()
-                                    #self.board_gui.drawPiece(p)
-                                    
-                                    
-                                    # actually moving the piece to an
-                                    #   empty square
-                                    self.board_gui.updateTurn()
-                                    #REPLACE W AFTERMOVEMESSAGE FUNCTION
-                                    message = (
-                                        selectedPiece.checkColor(),"moved",
-                                        selectedPiece.getPieceType(),"to",
-                                        self.board_gui.locationCoordToLabel(
-                                            selectedPiece.getLocationXY()))
-                                    self.board_gui.updateMessage(message)
-                                    for sq in self.board_gui.squares:
-                                        sq.resetClicked()
-                                    
-                
-                                    
+                                print("over here")
+                                spots = p.getPossibleMoves(
+                                    self.getMyKing(),
+                                    self.getEnemyKing(),
+                                    self.getMyTeam(),
+                                    self.getEnemyTeam(),"y")
+                                selectedPiece = p
+                                # Check if the piece has possible spots
+                                if spots != []:
+                                    self.board_gui.updateMessage(
+                                        "Please select a move \n"
+                                        "from the indicated \n"
+                                        "options")
+                                    # this is the authentic scenario
+                                    # Activate possible spots
+                                    for spot in spots:
+                                        for sq in self.board_gui.squares:
+                                            x,y = spot.getX(),spot.getY()
+                                            if (x == sq.getLocation()[0]
+                                                and
+                                                y == sq.getLocation()[1]):
+                                                sq.activate()
+                                    # Choice stores the valid piece,square
+                                    choice.append(p)
+                                    choice.append(click[0])
+                                    valid_move = True
+                                    invalid = True
                                     break
+                                # If not, update message
                                 else:
-                                    print("here")
-                                    continue
-##                                    clicked_sqs.remove(click_two[0])
-                                    x,y = p.getLocationXY()
-                                    #enemyPieces = p.movePiece(click_two[0].getLocation(),self.getEnemyTeam())
-                                    #reset square
-                                    #click[0].resetOccupiedSquare()
-                                    self.board_gui.drawPiece(p)
-                                    #print("CHOICEXY:",x,y)
-                                    #print("CHOICE LOC:", choice[0].getLocationXY())
-                                    p1 = Point(x-0.5,y-0.5)
-                                    p2 = Point(x+0.5,y+0.5)
-                                    rect=Rectangle(p1,p2)
-                                    rect.setFill(click[0].getColor())
-                                    rect.draw(self.board_gui.win)
-                                    #self.board_gui.undrawPiece(piece)
-                                    for sq in self.board_gui.getActiveSquares():
-                                        sq.deactivate()
-                                # Sahil's stuff here?
-                                # actually moving the piece
-                                # make sure to update message
-                                # break out of the while loop
+                                    self.board_gui.updateMessage(
+                                        "That piece does not have \n"
+                                        "any legal moves -- \n"
+                                        "please pick another piece.")
+                                    invalid = True
+                                    break
+                    # If invalid, get out of 2nd for loop
+                    if invalid:
                         break
 
+            # clicktwo is True (placing a piece)
+            if clicktwo:
+                print("sahil2")
+                # Move the piece to the clicked square
+                x,y = selectedPiece.getLocationXY()
+                enemyPieces = selectedPiece.movePiece(
+                    click[0].getLocation(),self.getEnemyTeam())
+                # Check whether a piece was eaten, save it to a variable
+                for piece in enemyPieces:
+                    if piece.getEaten():
+                        print("a piece is eaten")
+                        captured = piece
+                        # Reset the captured piece's square
+                        for sq in self.board_gui.squares:
+                            if ((sq.getLocation()[0] ==
+                                 piece.getLocationXY()[0]) and
+                                (sq.getLocation()[1] ==
+                                 piece.getLocationXY()[1])):
+                                sq.resetOccupiedSquare()
+                        # Remove the captured piece from the pieces list
+                        self.removePiece(piece)
+                # Reset the original square, redraw the piece at new loc
+                choice[1].resetOccupiedSquare()
+                self.board_gui.drawPiece(selectedPiece)
+
+                # Deactivate all squares for next round
+                for sq in self.board_gui.getActiveSquares():
+                    sq.deactivate()
+                
+                # Change team turns
+                self.board_gui.updateTurn()
+                
+                #REPLACE W AFTERMOVEMESSAGE FUNCTION
+                message = (
+                    selectedPiece.checkColor(),"moved",
+                    selectedPiece.getPieceType(),"to",
+                    self.board_gui.locationCoordToLabel(
+                        selectedPiece.getLocationXY()))
+                self.board_gui.updateMessage(message)
+                for sq in self.board_gui.squares:
+                    sq.resetClicked()
+
+                print("resetting choice2")
+                choice = []
+
+        # If the quit button is clicked, quit the program
         while True:
-           click = self.board_gui.allClicks()
-           if str(click) != ("quit","quit"):
+           pt = self.board_gui.allClicks()
+           if str(pt) != ("quit","quit"):
                 self.board_gui.closeGame()
                 ChessGame().main()        
         
 ChessGame().main()
+            
 
 #TO-DOs:
 #   1. Function to check for checkmate in Piece Class that returns boolean
@@ -518,3 +385,4 @@ ChessGame().main()
 #   1. Do you want us to show both "It is white's/black's move" AND ex.
 #       "White moved bishop to f4 -- it is now Black’s move." or just the
 #       latter?
+

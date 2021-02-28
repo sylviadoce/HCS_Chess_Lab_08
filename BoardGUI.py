@@ -68,6 +68,11 @@ class BoardGUI:
             Text(point,num).draw(self.win)
             y += 1
 
+    def getWin(self):
+        """Returns the graphics window instance variable."""
+
+        return self.win
+
     def locationCoordToLabel(self,location) -> str:
         """Converts a piece's coordinate to its alphabetized and
             numeric label."""

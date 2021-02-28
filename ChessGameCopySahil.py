@@ -238,7 +238,7 @@ class ChessGame:
 
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
-            print("while loop")
+            #print("while loop")
             # Set up a list and counter to track clicked squares
             clicked_sqs = []
             clicked_sq = 0
@@ -536,4 +536,3 @@ ChessGame().main()
 #   1. Do you want us to show both "It is white's/black's move" AND ex.
 #       "White moved bishop to f4 -- it is now Black’s move." or just the
 #       latter?
-
