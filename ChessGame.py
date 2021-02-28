@@ -227,8 +227,10 @@ class ChessGame:
             sq.deactivate()
 
         # Change team turns, display the correct after-move message
-        self.board_gui.updateTurn()        
+        self.board_gui.updateTurn()
 
+    def getCheck(self) -> bool:
+        return self.check
 
     def afterMoveMessage(self,p,captured):
         if self.checkmate: #DO
@@ -236,13 +238,13 @@ class ChessGame:
             p.getPieceType() + " to " +
             self.board_gui.locationCoordToLabel(p.getLocationXY()) +
             "-- \n\n Checkmate!")
-        elif self.check: #DO
+        elif self.getCheck():
             message = (p.checkColor().capitalize() + " moved \n"
             + p.getPieceType() + " to " +
             self.board_gui.locationCoordToLabel(p.getLocationXY()) +
             " (Check) -- \n\n It is now \n" +
             self.board_gui.checkTurnColor().capitalize() + "'s move.")
-        elif captured != "": #DO
+        elif captured != "":
             message = (p.checkColor().capitalize() + "'s "
             + p.getPieceType() + " captured \n" +
             self.board_gui.checkTurnColor().capitalize() + "'s " +
