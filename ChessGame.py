@@ -16,8 +16,14 @@ class ChessGame:
 
         self.checkmate = False
 
+        self.check = False
+
         # Getting either the white team (0) or black team (1)
         self.teamnum = [0,1]
+
+        # Store the list of all squares
+        self.squares = self.board_gui.getSquares()
+
 
     def createPawns(self) -> list:
         """Creates all white, black pawns in their standard locations."""
@@ -199,62 +205,88 @@ class ChessGame:
                     
                     return myKing
 
-##    def afterMoveMessage(self,p,capture:bool,capture_id#HOW TO INCORPORATE?):
-##        if checkmate: #DO
-##            message = str(p.checkColor()).capitalize(),"moved",
-##            p.getPieceType(),"to",
-##            self.board_gui.locationCoordToLabel(p.getLocationXY()),
-##            "-- Checkmate!" )
-##        elif check: #DO
-##            message = str(p.checkColor()).capitalize() + " moved "
-##            + p.getPieceType() " to " +
-##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
-##            "\n (Check) -- It is now \n" +
-##            self.board_gui.updateTurn().capitalize() + "'s move.")
-##        elif capture: #DO
-##            message = str(p.checkColor()).capitalize() + "'s "
-##            + p.getPieceType() "captured \n" +
-##            self.board_gui.updateTurn().capitalize() + "'s " +
-##            capture_id + " at "
-##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
-##            "\n -- It is now \n" +
-##            self.board_gui.updateTurn().capitalize() + "'s move.")
-##        else:
-##            message = str(p.checkColor()).capitalize() + " moved "
-##            + p.getPieceType() " to " +
-##            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
-##            "\n -- It is now \n" +
-##            self.board_gui.updateTurn().capitalize() + "'s move.")
-            
+    def errorMessage(self,num):
+        if num == 1:
+            self.board_gui.updateMessage(
+                "Please click on a \n" +
+                self.board_gui.checkTurnColor().capitalize() + " piece!")
+        elif num == 2:
+            self.board_gui.updateMessage("Please select a move \n"
+                                         "from the indicated \n"
+                                         "options")
+        else:
+            self.board_gui.updateMessage("That piece does not \n"
+                                         "have any legal moves -- \n\n"
+                                         "please pick another piece.")
+
+    def nextTurn(self):
+        """Prepares for the next team's turn by deactivating
+            all squares and changing the team's turn."""
+        # Deactivate all squares for next round
+        for sq in self.board_gui.getActiveSquares():
+            sq.deactivate()
+
+        # Change team turns, display the correct after-move message
+        self.board_gui.updateTurn()        
+
+
+    def afterMoveMessage(self,p,captured):
+        if self.checkmate: #DO
+            message = (p.checkColor().capitalize()," moved \n",
+            p.getPieceType() + " to " +
+            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+            "-- \n\n Checkmate!")
+        elif self.check: #DO
+            message = (p.checkColor().capitalize() + " moved \n"
+            + p.getPieceType() + " to " +
+            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+            " (Check) -- \n\n It is now \n" +
+            self.board_gui.checkTurnColor().capitalize() + "'s move.")
+        elif captured != "": #DO
+            message = (p.checkColor().capitalize() + "'s "
+            + p.getPieceType() + " captured \n" +
+            self.board_gui.checkTurnColor().capitalize() + "'s " +
+            captured.getPieceType() + " at " +
+            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+            " -- \n\n It is now \n" +
+            self.board_gui.checkTurnColor().capitalize() + "'s move.")
+        else:
+            message = (p.checkColor().capitalize() + " moved \n"
+            + p.getPieceType() + " to " +
+            self.board_gui.locationCoordToLabel(p.getLocationXY()) +
+            " -- \n\n It is now \n" +
+            self.board_gui.checkTurnColor().capitalize() + "'s move.")
+
+        self.board_gui.updateMessage(message)
+
+    def checkQuit(self):
+        # If the quit button is clicked, quit the program
+        while True:
+           pt = self.board_gui.allClicks()
+           if str(pt) != ("quit","quit"):
+                self.board_gui.closeGame()
+                ChessGame().main()
 
     def main(self):
         """Runs the game, using functions to move the pieces."""
-
-        # Create the pieces
+        # Create the pieces and a list to store the chosen piece and square
         pieces = self.createPieces()
-
-        # Set up a list to store the authentic click (choosing a piece)
         choice = []
 
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
-            valid_move = False
-
             # Expect a click in the graphics window
             click = self.board_gui.allClicks()
-
             # If the click is not on a square, loop
             if click[1] != "square":
-                continue
-            
-            # Check if clicktwo is False (choosing a piece) or
-                # True (placing a valid piece)
+                continue 
+            # Check if clicktwo is False (choosing a piece)
+                # or True (placing a valid piece)
             clicktwo = False
-            for sq in self.board_gui.squares:
+            for sq in self.squares:
                 if sq.checkActive():
                     print("clicktwo is True")
                     clicktwo = True
-                    valid_move = True
                     break
 
             # clicktwo is False (choosing a piece)
@@ -268,16 +300,11 @@ class ChessGame:
                             # If wrong team, update message
                             if (p.checkColor() !=
                                 self.board_gui.checkTurnColor()):
-                                print("place1")
-                                self.board_gui.updateMessage(
-                                    "Please click on a \n" +
-                                    self.board_gui.checkTurnColor() +
-                                    " piece!")
+                                self.errorMessage(1)
                                 invalid = True
                                 break
                             # If right team, get possible moves
                             else:
-                                print("over here")
                                 spots = p.getPossibleMoves(
                                     self.getMyKing(),
                                     self.getEnemyKing(),
@@ -286,88 +313,61 @@ class ChessGame:
                                 selectedPiece = p
                                 # Check if the piece has possible spots
                                 if spots != []:
-                                    self.board_gui.updateMessage(
-                                        "Please select a move \n"
-                                        "from the indicated \n"
-                                        "options")
-                                    # this is the authentic scenario
+                                    self.errorMessage(2)
                                     # Activate possible spots
                                     for spot in spots:
-                                        for sq in self.board_gui.squares:
+                                        for sq in self.squares:
                                             x,y = spot.getX(),spot.getY()
                                             if (x == sq.getLocation()[0]
                                                 and
                                                 y == sq.getLocation()[1]):
                                                 sq.activate()
-                                    # Choice stores the valid piece,square
+                                    # Choice stores the valid piece, square
                                     choice.append(p)
                                     choice.append(click[0])
-                                    valid_move = True
                                     invalid = True
                                     break
-                                # If not, update message
                                 else:
-                                    self.board_gui.updateMessage(
-                                        "That piece does not have \n"
-                                        "any legal moves -- \n"
-                                        "please pick another piece.")
+                                    self.errorMessage(3)
                                     invalid = True
                                     break
-                    # If invalid, get out of 2nd for loop
+                        else:
+                            self.errorMessage(1)
                     if invalid:
                         break
-
             # clicktwo is True (placing a piece)
             if clicktwo:
-                print("sahil2")
-                # Move the piece to the clicked square
-                x,y = selectedPiece.getLocationXY()
-                enemyPieces = selectedPiece.movePiece(
-                    click[0].getLocation(),self.getEnemyTeam())
-                # Check whether a piece was eaten, save it to a variable
-                for piece in enemyPieces:
-                    if piece.getEaten():
-                        print("a piece is eaten")
-                        captured = piece
-                        # Reset the captured piece's square
-                        for sq in self.board_gui.squares:
-                            if ((sq.getLocation()[0] ==
-                                 piece.getLocationXY()[0]) and
-                                (sq.getLocation()[1] ==
-                                 piece.getLocationXY()[1])):
-                                sq.resetOccupiedSquare()
-                        # Remove the captured piece from the pieces list
-                        self.removePiece(piece)
-                # Reset the original square, redraw the piece at new loc
-                choice[1].resetOccupiedSquare()
-                self.board_gui.drawPiece(selectedPiece)
-
-                # Deactivate all squares for next round
-                for sq in self.board_gui.getActiveSquares():
-                    sq.deactivate()
-                
-                # Change team turns
-                self.board_gui.updateTurn()
-                
-                #REPLACE W AFTERMOVEMESSAGE FUNCTION
-                message = (
-                    selectedPiece.checkColor(),"moved",
-                    selectedPiece.getPieceType(),"to",
-                    self.board_gui.locationCoordToLabel(
-                        selectedPiece.getLocationXY()))
-                self.board_gui.updateMessage(message)
-                for sq in self.board_gui.squares:
-                    sq.resetClicked()
-
-                print("resetting choice2")
-                choice = []
-
-        # If the quit button is clicked, quit the program
-        while True:
-           pt = self.board_gui.allClicks()
-           if str(pt) != ("quit","quit"):
-                self.board_gui.closeGame()
-                ChessGame().main()        
+                if click[0].checkActive():
+                    # Move the piece to the clicked square
+                    x,y = selectedPiece.getLocationXY()
+                    enemyPieces = selectedPiece.movePiece(
+                        click[0].getLocation(),self.getEnemyTeam())
+                    captured = ""
+                    # Check whether a piece was eaten, save it to a variable
+                    for piece in enemyPieces:
+                        if piece.getEaten():
+                            captured = piece
+                            # Reset the captured piece's square
+                            for sq in self.squares:
+                                if ((sq.getLocation()[0] ==
+                                     piece.getLocationXY()[0]) and
+                                    (sq.getLocation()[1] ==
+                                     piece.getLocationXY()[1])):
+                                    sq.resetOccupiedSquare()
+                            # Remove the captured piece from the pieces list
+                            self.removePiece(piece)
+                    # Reset the original square, redraw piece, turn, choice
+                    choice[1].resetOccupiedSquare()
+                    self.board_gui.drawPiece(selectedPiece)
+                    self.nextTurn()
+                    choice = []
+                    # Display the correct after-move message, reset choice
+                    self.afterMoveMessage(selectedPiece,captured)
+                else:
+                    self.errorMessage(2)
+                    
+        # Quit the program if the quit button is clicked
+        self.checkQuit()
         
 ChessGame().main()
             
@@ -380,9 +380,4 @@ ChessGame().main()
 #   4. Make sure the pieces can distinguish between going through other
 #       pieces when moving, exception: knights
 #   5. Update the message after each turn to specifics of the move.
-
-#QUESTIONS:
-#   1. Do you want us to show both "It is white's/black's move" AND ex.
-#       "White moved bishop to f4 -- it is now Black’s move." or just the
-#       latter?
 

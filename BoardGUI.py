@@ -73,6 +73,10 @@ class BoardGUI:
 
         return self.win
 
+    def getSquares(self) -> list:
+
+        return self.squares
+
     def locationCoordToLabel(self,location) -> str:
         """Converts a piece's coordinate to its alphabetized and
             numeric label."""
@@ -109,7 +113,7 @@ class BoardGUI:
         else:
             self.color = "white"
 
-        self.message.setText("It is " + self.color + "'s move.")
+        return self.color
 
     def updateMessage(self,update):
         """Sets the message to update."""
