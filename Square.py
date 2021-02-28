@@ -75,9 +75,9 @@ class Square(Button):
     def resetOccupiedSquare(self):
         #Call this after a piece has moved off of the square it was occupying
         self.occupied = False
-        rect=Rectangle(self.p1,self.p2)
-        rect.setFill(self.color)
-        rect.draw(self.win)
+        self.rect=Rectangle(self.p1,self.p2)
+        self.rect.setFill(self.color)
+        self.rect.draw(self.win)
         
 
 
