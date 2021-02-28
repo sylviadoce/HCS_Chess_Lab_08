@@ -211,7 +211,11 @@ class ChessGame:
         elif num == 2:
             self.board_gui.updateMessage("Please select a move \n"
                                          "from the indicated \n"
-                                         "options")
+                                         "options.")
+        elif num == 3:
+            self.board_gui.updateMessage("That is not a \n"
+                                         "valid move.\n\n"
+                                         "Please try again.")
         else:
             self.board_gui.updateMessage("That piece does not \n"
                                          "have any legal moves -- \n\n"
@@ -226,6 +230,12 @@ class ChessGame:
 
         # Change team turns, display the correct after-move message
         self.board_gui.updateTurn()
+
+    def resetTurn(self):
+        """User did not click on a valid move, so reset the turn."""
+        # Deactivate all squares for next round
+        for sq in self.board_gui.getActiveSquares():
+            sq.deactivate()
 
     def afterMoveMessage(self,p,captured):
         if p.getCheckMate():
@@ -325,7 +335,7 @@ class ChessGame:
                                     invalid = True
                                     break
                                 else:
-                                    self.errorMessage(3)
+                                    self.errorMessage(4)
                                     invalid = True
                                     break
                         else:
@@ -361,7 +371,10 @@ class ChessGame:
                     # Display the correct after-move message, reset choice
                     self.afterMoveMessage(selectedPiece,captured)
                 else:
-                    self.errorMessage(2)
+                    self.errorMessage(3)
+                    self.resetTurn()
+                    choice = []
+                    continue
                 self.checkmate = selectedPiece.getCheckMate()
                     
         # Quit the program if the quit button is clicked
