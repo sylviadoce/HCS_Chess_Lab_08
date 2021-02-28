@@ -76,16 +76,16 @@ class BoardGUI:
         coord = 0.5
         # Associate the y/x coordinate with its respective letter/number
         print(location)
-        for y in range(8):
-            #print(location.getY())
-            if location[1] == coord:
-                loc_label += str(self.board_label[0][y+1])
+        for x in range(8):
+            if location[0] == coord:
+                loc_label += str(self.board_label[0][x])
                 break
             coord += 1
         coord = 0.5
-        for x in range(8):
-            if location[0] == coord:
-                loc_label += str(self.board_label[1][x-1])
+        for y in range(8):
+            #print(location.getY())
+            if location[1] == coord:
+                loc_label += str(self.board_label[1][y])
                 break
             coord += 1
 
