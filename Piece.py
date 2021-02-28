@@ -227,7 +227,7 @@ class Piece:
             else:
                 noMoves = False
                 break
-        if noMoves = True:
+        if noMoves == True:
             for piece in myTeam:
                 piece.setCheckMate()
             
