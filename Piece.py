@@ -23,9 +23,9 @@ class Piece:
         #removes spot that will put their own king in check
         #print(self.pieceType)
         if avoidCheck != "nocheck":
-##            print("spots before avoidCheck",self.spots)
+            print("spots before avoidCheck",self.spots)
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
-##            print("spots after avoidCheck",self.spots)
+            print("spots after avoidCheck",self.spots)
             #print(self.pieceType,self.color,"Piece being moved")
         
         #print(self.spots,"First")
@@ -108,13 +108,13 @@ class Piece:
     def eatPiece(self,enemyPieces):
         for piece in enemyPieces:
             x,y = self.getLocationXY()
-##            print(self.getLocationXY())
+            #print(self.getLocationXY())
             enemyx,enemyy = piece.getLocationXY()
-##            print("enemy",piece.getLocationXY())
+            #print("enemy",piece.getLocationXY())
             if x == enemyx and y == enemyy:
-##                print(piece.getPieceType(),piece.checkColor(),"has been eaten")
-##                print(piece.checkColor(),piece.getLocation(),"enemy")
-##                print(self.color,self.location)
+                print(piece.getPieceType(),piece.checkColor(),"has been eaten")
+                print(piece.checkColor(),piece.getLocation(),"enemy")
+                print(self.color,self.location)
                 piece.isEaten()
 
     #use this for updating message box 
@@ -159,22 +159,42 @@ class Piece:
     def avoidOwnCheck(self, myKing,enemyKing,myTeam,enemyTeam):
         kingX, kingY = myKing.getLocationXY()
         removeSpots = []
+        numChecks = 0
         #myTeam.append(self) #How to make a list append the object that it is in?
         currentLocation = self.location
+        self.spots.append(currentLocation)
         for spot in self.spots:
-##            print("avoidCheck",self.spots)
+            print("avoidCheck",self.spots)
             self.location = spot
             for piece in enemyTeam:
                 listDir,numSpaces = piece.calcListDirections()
                 possibleEnemyMoves = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
+                print(piece.checkColor())
                 for pos in possibleEnemyMoves:
-##                    print(kingX,",",kingY,"king")
-##                    print(pos.getX(),",",pos.getY(),"pos")
-##                    print("spot",spot)
-                    if kingX == pos.getX() and kingY == pos.getY():
-##                        print("Piece",164)
-                    #This checks if the the king is in check without moving any of the pieces.
-                        removeSpots.append(spot) #find correct notation
+                    #print(kingX,",",kingY,"king")
+                    #print(pos.getX(),",",pos.getY(),"pos")
+                    #print("spot",spot)
+                    if (kingX == pos.getX() and kingY == pos.getY()) and (self.pieceType!="king"):
+                        print("Piece",164)
+                        if currentLocation == spot:
+                            for p in myTeam:
+                                p.setCheck()
+                                numChecks +=1                                
+                        else: removeSpots.append(spot) #find correct notation
+                    elif self.pieceType == "king":
+                        x,y = spot.getX(),spot.getY()
+                        if x == pos.getX() and y == pos.getY():
+                            print("x",x,"y",y)
+                            print(pos.getX(),pos.getY())
+                            if spot not in removeSpots:
+                                if currentLocation != spot:
+                                    removeSpots.append(spot)
+                            
+        removeSpots.append(currentLocation)
+        if numChecks == 0:
+            for p in myTeam:
+                p.noCheck()
+        print(self.pieceType,removeSpots,self.spots)
         for spot in removeSpots:
             self.spots.remove(spot)
         self.location = currentLocation            
@@ -182,19 +202,19 @@ class Piece:
             #check that if the piece's location is at one of these spots, ds myKing become in check?
 
     
-    def getKingCheck(self,enemyKing,enemyPieces,sameTeam):
-        numChecksReturned = 0
-        if self.pieceType == "king":
-            for piece in enemyPieces:
-                spots = []
-                spots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,piece.calcListDirections(),piece.getNumSpaces())
-                for pt in spots:
-                    if pt == self.location:
-                        numChecksReturned +=1
-                        
-            if numChecksReturned>0:
-                return True
-            else: return False
+    #def getKingCheck(self,enemyKing,enemyPieces,sameTeam):
+    #    numChecksReturned = 0
+    #    if self.pieceType == "king"
+    #        for piece in enemyPieces:
+    #            spots = []
+    #            spots = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,piece.calcListDirections(),piece.getNumSpaces())
+    #            for pt in spots:
+    #                if pt == self.location:
+    #                    numChecksReturned +=1
+    #                    
+    #        if numChecksReturned>0:
+    #            return True
+    #        else: return False
                     
 
     def getEaten(self):
@@ -208,6 +228,15 @@ class Piece:
 
     def getLocationXY(self):
         return self.location.getX(),self.location.getY()
+
+    def setCheck(self):
+        self.check = True
+
+    def noCheck(self):
+        self.check = False
+
+    def getCheck(self):
+        return self.check
 
     def checkPieceID(self):
         return self.ID
