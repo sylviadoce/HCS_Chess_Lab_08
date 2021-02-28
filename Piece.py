@@ -190,6 +190,10 @@ class Piece:
                             if spot not in removeSpots:
                                 if currentLocation != spot:
                                     removeSpots.append(spot)
+                                if currentLocation == spot:
+                                    for p in myTeam:
+                                        p.setCheck()
+                                        numChecks += 1
                             
         removeSpots.append(currentLocation)
         if numChecks == 0:
