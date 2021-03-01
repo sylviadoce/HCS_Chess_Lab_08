@@ -9,6 +9,9 @@ from BoardGUI import *
 
 class ChessGame:
     def __init__(self):
+        """Initializes the class that runs the game, including
+            variables to get other modules, a list of pieces,
+            a checkmate boolean, and a list of the board squares."""
         self.board_gui = BoardGUI("white")
 
         # Create a list of two lists storing all pieces
@@ -16,12 +19,8 @@ class ChessGame:
 
         self.checkmate = False
 
-        # Getting either the white team (0) or black team (1)
-        self.teamnum = [0,1]
-
         # Store the list of all squares
         self.squares = self.board_gui.getSquares()
-
 
     def createPawns(self) -> list:
         """Creates all white, black pawns in their standard locations."""
@@ -114,6 +113,8 @@ class ChessGame:
         return kings
 
     def createPieces(self) -> list:
+        """Returns a list of all created pieces, divided into list items
+            by their team color and drawn to the board."""
         # Create all pieces from their subclass
         pawns = self.createPawns()
         bishops = self.createBishops()
@@ -139,7 +140,6 @@ class ChessGame:
 
     def pawnToQueen(self,pawn):
         """Replaces a pawn with a queen once at the end of the board."""
-        
         colors = ["white","black"]
         
         # Delete the pawn object, undraw the pawn image, and create a new
@@ -152,6 +152,7 @@ class ChessGame:
                 self.pieces[i].append(Queen(loc,colors[i],"queen"))
 
     def getEnemyTeam(self):
+        """Returns a list of the current enemy team."""
         if self.board_gui.checkTurnColor() == "white":
             self.enemyPieces = self.pieces[1]
         else:
@@ -160,6 +161,7 @@ class ChessGame:
         return self.enemyPieces
 
     def getMyTeam(self):
+        """Returns a list of the current team."""
         if self.board_gui.checkTurnColor() == "white":
             self.sameTeam = self.pieces[0]
         else:
@@ -168,6 +170,7 @@ class ChessGame:
         return self.sameTeam
 
     def removePiece(self,piece):
+        """Removes a piece from its team's list."""
         if piece.checkColor() == "white":
             self.pieces[0].remove(piece)
 
@@ -175,6 +178,7 @@ class ChessGame:
             self.pieces[1].remove(piece)
             
     def getEnemyKing(self) -> list:
+        """Returns the current enemy king."""
         if self.board_gui.checkTurnColor() == "white":
             for bpiece in self.pieces[1]:
                 if bpiece.getPieceType() == "king":
@@ -188,8 +192,8 @@ class ChessGame:
                     
                     return enemyKing
 
-
     def getMyKing(self) -> list:
+        """Returns the current king."""
         if self.board_gui.checkTurnColor() == "white":
             for wpiece in self.pieces[0]:
                 if wpiece.getPieceType() == "king":
@@ -204,6 +208,7 @@ class ChessGame:
                     return myKing
 
     def errorMessage(self,num):
+        """Updates the message with the proper error."""
         if num == 1:
             self.board_gui.updateMessage(
                 "Please click on a \n" +
@@ -238,6 +243,9 @@ class ChessGame:
             sq.deactivate()
 
     def afterMoveMessage(self,p,captured):
+        """Updates the message with the proper after-move message,
+            determined whether it there is checkmate, check, a
+            captured piece, or just a move."""
         if p.getCheckMate():
             message = (p.checkColor().capitalize()," moved \n",
             p.getPieceType() + " to " +
@@ -267,7 +275,8 @@ class ChessGame:
         self.board_gui.updateMessage(message)
 
     def checkQuit(self):
-        # If the quit button is clicked, quit the program
+        """Quits the program if the quit button is clicked."""
+        # Always expect a quit button click
         while True:
            pt = self.board_gui.allClicks()
            if str(pt) != ("quit","quit"):
@@ -275,11 +284,11 @@ class ChessGame:
                 ChessGame().main()
 
     def main(self):
-        """Runs the game, using functions to move the pieces."""
+        """Runs the game: carries out actions according to user clicks
+            and checks the validity of actions."""
         # Create the pieces and a list to store the chosen piece and square
         pieces = self.createPieces()
         choice = []
-
         # Loop while the game is not ended (no king in checkmate)
         while not self.checkmate:
             # Expect a click in the graphics window
@@ -295,10 +304,8 @@ class ChessGame:
                     print("clicktwo is True")
                     clicktwo = True
                     break
-
             # clicktwo is False (choosing a piece)
             if not clicktwo:
-                #print("one click")
                 for lstPiece in pieces:
                     for p in lstPiece:
                         invalid = False
@@ -350,7 +357,7 @@ class ChessGame:
                     enemyPieces = selectedPiece.movePiece(
                         click[0].getLocation(),self.getEnemyTeam())
                     captured = ""
-                    # Check whether a piece was eaten, save it to a variable
+                    # Check if a piece was eaten, save it to a variable
                     for piece in enemyPieces:
                         if piece.getEaten():
                             captured = piece
@@ -361,22 +368,20 @@ class ChessGame:
                                     (sq.getLocation()[1] ==
                                      piece.getLocationXY()[1])):
                                     sq.resetOccupiedSquare()
-                            # Remove the captured piece from the pieces list
+                            # Remove captured piece from the pieces list
                             self.removePiece(piece)
-                    # Reset the original square, redraw piece, turn, choice
+                    # Reset og square, redraw piece, turn, choice, message
                     choice[1].resetOccupiedSquare()
                     self.board_gui.drawPiece(selectedPiece)
                     self.nextTurn()
                     choice = []
-                    # Display the correct after-move message, reset choice
                     self.afterMoveMessage(selectedPiece,captured)
                 else:
                     self.errorMessage(3)
                     self.resetTurn()
                     choice = []
                     continue
-                self.checkmate = selectedPiece.getCheckMate()
-                    
+                self.checkmate = selectedPiece.getCheckMate()                   
         # Quit the program if the quit button is clicked
         self.checkQuit()
         
