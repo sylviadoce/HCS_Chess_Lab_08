@@ -1,30 +1,26 @@
 # Sylvia Chin
 #
 # This is the Board GUI that manages all things interface, including all
-# board square, piece image, message, and quit capabilities.
+# board squares, piece images, messages, and quit capabilities. Uses the
+# graphics, Button, and Piece classes, and subclass Square.
 #
-# Import the superclass Button subclass Square class
 from graphics import *
 from Button import *
 from Square import *
-from Piece import *
 
 class BoardGUI:
     def __init__(self,color):
-##        # Access the Piece Class variables
-##        self.piece = Piece()
-
+        """Initializes the game's graphics, including a variable to
+            track the current team's color, the window, the message
+            label/box/text, the quit button, and all board squares."""
         # Track what color team's turn it is
         self.color = color
         
         # Create a graphics window called "Chess", 900x600
         self.win = GraphWin("Chess",900,600)
-        # Set coordinates so each square move is 1
+        # Set coordinates so each square move is 1 - bottom left square's
+        #   center is (0.5,0.5)
         self.win.setCoords(-8,-2,10,10)
-        
-        # Marks the origin (0,0), DELETE LATER
-        self.origin = Text(Point(0,0),"ORIGIN")
-        self.origin.draw(self.win)
 
         # Create a message label, box, and text
         self.message_label = Text(Point(-5,9),"MESSAGES")
@@ -43,7 +39,7 @@ class BoardGUI:
 
         # List to store all squares
         self.squares = []
-        # Create all 64 chess board squares each 50x50, append to squares
+        # Create all 64 chess board squares each 1x1, append to squares
         x,y = 0.5,0.5
         for row in range(8):
             for column in range(8):
@@ -70,17 +66,15 @@ class BoardGUI:
 
     def getWin(self):
         """Returns the graphics window instance variable."""
-
         return self.win
 
     def getSquares(self) -> list:
-
+        """Returns the list of all board squares."""
         return self.squares
 
     def locationCoordToLabel(self,location) -> str:
         """Converts a piece's coordinate to its alphabetized and
             numeric label."""
-        
         loc_label = ""
         coord = 0.5
         # Associate the y/x coordinate with its respective letter/number
@@ -105,9 +99,7 @@ class BoardGUI:
         return self.color
 
     def updateTurn(self):
-        """Updates the color and message to reflect whichever team's
-            turn it is."""
-        
+        """Updates the color to reflect whichever team's turn it is."""   
         if self.color == "white":
             self.color = "black"
         else:
@@ -130,18 +122,14 @@ class BoardGUI:
 
     def drawPiece(self,piece):
         """Draws the piece in the graphics window."""
-        #pieceImg = Image(piece.getLocation(),piece.checkColor()+piece.getPieceType()+".png")
         piece.imageUpdate().draw(self.win)
-
 
     def undrawPiece(self,piece):
         """Undraws the piece in the graphics window."""
-
         self.drawPiece(piece).undraw(self.win)
 
     def getActiveSquares(self) -> list:
         """Returns a list of all the activated squares."""
-
         active_sqs = []
         for sq in self.squares:
             if sq.checkActive():
@@ -150,6 +138,7 @@ class BoardGUI:
         return active_sqs      
 
     def closeGame(self):
+        """Closes the graphics window."""
         self.win.close()
 
     def allClicks(self):
@@ -168,47 +157,4 @@ class BoardGUI:
             if sq.clicked(pt):
                 return sq,"square"
 
-        return "quit","quit"
-                
-##                # If another square is activated, check valid move
-##                if self.checkBoardStatus != 0:
-##                    # this needs to move the piece
-##                    # if capturing a piece, the other piece is undrawn
-##                    # Change the turn color (after successful move)
-##                    self.updateTurnColor()
-##                    return "move sq"
-##                else:
-##                    return "wrong sq"
-                
-## PUT IN CHESSGAME
-##                # Check if the clicked square is occupied by a piece
-##                for piece in pieces:
-##                    for p in piece:
-##                        if sq.getLocation() == p.getLocation():
-##                            if p.checkColor() == self.color:
-##                                # activate the possible squares
-##                                # deactivate all other squares
-##                                return "good sq"
-##                            else:
-##                                return "wrong sq"
-##                        else:
-##                            self.message.setText(
-##                                "Please click on a",self.color,"piece")
-##                            return "wrong sq"
-
-    
-
-###### END OF CLASS ######
-def main():
-    board = BoardGUI("white")
-    board.allClicks()
-
-#TO-DOs:
-#   1. Keep track of which color team's turn it is
-#   2. Figure out what piece color is on the square
-#   3. Squares should only be able to be clicked if active
-
-#QUESTIONS:
-#   1. Is this truly encapsulated if I need Square and Piece to make it work?
-        # Purely use the piece through a method, not instance
-#   2. What's the best way to track which team's turn it is?
+        return "quit","quit"    

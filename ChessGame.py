@@ -1,6 +1,7 @@
 # Sylvia Chin
 #
-# Chess Games module that runs the game - class??
+# This is the ChessGame module that runs the game as a class, using the
+# BoardGUI and Piece Classes (and subclasses).
 #
 from Piece import *
 from SylviaPieceSubclasses import *
@@ -384,16 +385,6 @@ class ChessGame:
                 self.checkmate = selectedPiece.getCheckMate()                   
         # Quit the program if the quit button is clicked
         self.checkQuit()
-        
+
+# Call the main function using the ChessGame Class
 ChessGame().main()
-            
-
-#TO-DOs:
-#   1. Function to check for checkmate in Piece Class that returns boolean
-#   2. Pawn transformation into Queen (del pawn object and create w queen?)
-#   3. Update square and button with edits, make sure importing the correct
-#       module.
-#   4. Make sure the pieces can distinguish between going through other
-#       pieces when moving, exception: knights
-#   5. Update the message after each turn to specifics of the move.
-
