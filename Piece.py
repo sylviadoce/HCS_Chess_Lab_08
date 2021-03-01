@@ -28,10 +28,10 @@ class Piece:
         #removes spot that will put their own king in check
         #print(self.pieceType)
         if avoidCheck != "nocheck":
-            print("location",self.getLocation())
-            print("spots before avoidCheck",self.spots,self.pieceType)
+            #print("location",self.getLocation())
+            #print("spots before avoidCheck",self.spots,self.pieceType)
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
-            print("spots after avoidCheck",self.spots,self.pieceType)
+            #print("spots after avoidCheck",self.spots,self.pieceType)
             #print(self.pieceType,self.color,"Piece being moved")
         #if avoidCheck == "y":self.calcCheckMate(myKing,enemyKing,myTeam,enemyTeam)
         self.myKing = myKing
@@ -58,7 +58,7 @@ class Piece:
         if self.pieceType == "pawn":
             self.firstPawnMove = False
         enemyPieces[0].getPossibleMoves(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam,"y")
-        print(enemyPieces[0].getCheck(),"check")
+        #print(enemyPieces[0].getCheck(),"check")
         if enemyPieces[0].getCheck():
             self.setOppCheck("t")
             enemyPieces[0].calcCheckMate(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam)
@@ -66,8 +66,8 @@ class Piece:
                 self.setOppCheckMate("t")
         else:
             self.setOppCheck("f")
-        print(self.getOppCheck(),"oppCheck")
-        print(self.getOppCheckMate(),"oppCheckmate")
+        #print(self.getOppCheck(),"oppCheck")
+        #print(self.getOppCheckMate(),"oppCheckmate")
         return enemyPieces
         
 
@@ -102,10 +102,10 @@ class Piece:
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
                 if self.color == "white" and self.pieceType == "queen":
-                    print(x,y)
+                    #print(x,y)
                 for piece in enemyTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
-                        print(75)
+                        #print(75)
                         if self.pieceType == "pawn":
                             absDir = [abs(direction[0]),abs(direction[1])]
                             if absDir == [1,1]:
@@ -243,7 +243,8 @@ class Piece:
         removeSpots.append(currentLocation)
         print(self.pieceType,removeSpots,self.spots)
         for spot in removeSpots:
-            self.spots.remove(spot)
+            if spot in self.spots:
+                self.spots.remove(spot)
         self.location = currentLocation            
                     
             #check that if the piece's location is at one of these spots, ds myKing become in check?
