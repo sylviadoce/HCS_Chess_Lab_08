@@ -28,10 +28,17 @@ class Piece:
         #removes spot that will put their own king in check
         #print(self.pieceType)
         if avoidCheck != "nocheck":
+<<<<<<< HEAD
 ##            print("location",self.getLocation())
 ##            print("spots before avoidCheck",self.spots,self.pieceType)
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
 ##            print("spots after avoidCheck",self.spots,self.pieceType)
+=======
+            #print("location",self.getLocation())
+            #print("spots before avoidCheck",self.spots,self.pieceType)
+            self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
+            #print("spots after avoidCheck",self.spots,self.pieceType)
+>>>>>>> 160c0ee9d798903f5c89041f715507d4d7ee2dee
             #print(self.pieceType,self.color,"Piece being moved")
         #if avoidCheck == "y":self.calcCheckMate(myKing,enemyKing,myTeam,enemyTeam)
         self.myKing = myKing
@@ -58,7 +65,11 @@ class Piece:
         if self.pieceType == "pawn":
             self.firstPawnMove = False
         enemyPieces[0].getPossibleMoves(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam,"y")
+<<<<<<< HEAD
 ##        print(enemyPieces[0].getCheck(),"check")
+=======
+        #print(enemyPieces[0].getCheck(),"check")
+>>>>>>> 160c0ee9d798903f5c89041f715507d4d7ee2dee
         if enemyPieces[0].getCheck():
             self.setOppCheck("t")
             enemyPieces[0].calcCheckMate(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam)
@@ -66,8 +77,13 @@ class Piece:
                 self.setOppCheckMate("t")
         else:
             self.setOppCheck("f")
+<<<<<<< HEAD
 ##        print(self.getOppCheck(),"oppCheck")
 ##        print(self.getOppCheckMate(),"oppCheckmate")
+=======
+        #print(self.getOppCheck(),"oppCheck")
+        #print(self.getOppCheckMate(),"oppCheckmate")
+>>>>>>> 160c0ee9d798903f5c89041f715507d4d7ee2dee
         return enemyPieces
         
 
@@ -101,11 +117,19 @@ class Piece:
                 #elif x <0 or y<0 or x>0 or y>0: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
+<<<<<<< HEAD
 ##                if self.color == "white" and self.pieceType == "queen":
 ##                    print(x,y)
                 for piece in enemyTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
 ##                        print(75)
+=======
+                if self.color == "white" and self.pieceType == "queen":
+                    #print(x,y)
+                for piece in enemyTeam:
+                    if x == piece.getLocation().getX() and y == piece.getLocation().getY():
+                        #print(75)
+>>>>>>> 160c0ee9d798903f5c89041f715507d4d7ee2dee
                         if self.pieceType == "pawn":
                             absDir = [abs(direction[0]),abs(direction[1])]
                             if absDir == [1,1]:
