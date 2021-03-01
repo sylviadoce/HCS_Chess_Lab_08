@@ -141,7 +141,7 @@ class Piece:
     #for pieces - allows them to only make moves that prevent the king from going into check
     #for king - prevents him from going to squares that put himself in check.
     def avoidOwnCheck(self, myKing,enemyKing,myTeam,enemyTeam):
-    '''Prevents pieces from moving in ways that will put their king in check. It will also check for check.'''
+        '''Prevents pieces from moving in ways that will put their king in check. It will also check for check.'''
         for p in myTeam:
             p.setCheck("f")
         kingX, kingY = myKing.getLocationXY()
