@@ -78,7 +78,6 @@ class BoardGUI:
         loc_label = ""
         coord = 0.5
         # Associate the y/x coordinate with its respective letter/number
-        print(location)
         for x in range(8):
             if location[0] == coord:
                 loc_label += str(self.board_label[0][x])
