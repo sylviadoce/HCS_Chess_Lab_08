@@ -157,17 +157,6 @@ class ChessGame:
                         sq.resetOccupiedSquare()
                         return True
         return False
-        
-##        colors = ["white","black"]
-##        
-##        # Delete the pawn object, undraw the pawn image, and create a new
-##        #   queen for the player's team color at the same location
-##        loc = pawn.getLocation()
-##        for i in range(2):
-##            if self.color == colors[i]:
-##                self.pieces[i].remove(pawn)
-##                self.board_gui.undrawPiece(pawn)
-##                self.pieces[i].append(Queen(loc,colors[i],"queen"))
 
     def getEnemyTeam(self):
         """Returns a list of the current enemy team."""
@@ -406,8 +395,6 @@ class ChessGame:
                     choice = []
                     continue
                 self.checkmate = selectedPiece.getOppCheckMate()
-##                if self.checkmate:
-##                    break
         # Quit the program if the quit button is clicked
         self.checkQuit()
 
