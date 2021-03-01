@@ -1,4 +1,5 @@
 # Sylvia Chin
+# HCS Lab 08 - Chess
 #
 # This contains the subclasses of Piece for pieces Pawn, Rook,
 #   Knight and Queen.

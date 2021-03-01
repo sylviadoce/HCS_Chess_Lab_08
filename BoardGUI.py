@@ -1,4 +1,5 @@
 # Sylvia Chin
+# HCS Lab 08 - Chess
 #
 # This is the Board GUI that manages all things interface, including all
 # board squares, piece images, messages, and quit capabilities. Uses the
@@ -85,7 +86,6 @@ class BoardGUI:
             coord += 1
         coord = 0.5
         for y in range(8):
-            #print(location.getY())
             if location[1] == coord:
                 loc_label += str(self.board_label[1][y])
                 break

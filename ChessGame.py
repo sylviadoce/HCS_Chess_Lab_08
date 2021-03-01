@@ -1,4 +1,5 @@
 # Sylvia Chin
+# HCS Lab 08 - Chess
 #
 # This is the ChessGame module that runs the game as a class, using the
 # BoardGUI and Piece Classes (and subclasses).
@@ -294,7 +295,6 @@ class ChessGame:
            pt = self.board_gui.allClicks()
            if str(pt) != ("quit","quit"):
                 self.board_gui.closeGame()
-##                ChessGame().main()
 
     def main(self):
         """Runs the game: carries out actions according to user clicks
