@@ -13,7 +13,11 @@ class Piece:
         self.imageUpdate()
         self.ID = ID
         self.firstPawnMove = True #this will be used in getPossibleMoves
+        self.check = False
         self.checkmate = False
+        self.actualLocation = self.location
+        self.oppCheck = False
+        self.oppCheckMate = False
         
 
     def getPossibleMoves(self,myKing,enemyKing,myTeam,enemyTeam,avoidCheck):
@@ -24,11 +28,16 @@ class Piece:
         #removes spot that will put their own king in check
         #print(self.pieceType)
         if avoidCheck != "nocheck":
-            print("spots before avoidCheck",self.spots)
+            print("location",self.getLocation())
+            print("spots before avoidCheck",self.spots,self.pieceType)
             self.avoidOwnCheck(myKing,enemyKing,myTeam,enemyTeam)
-            print("spots after avoidCheck",self.spots)
+            print("spots after avoidCheck",self.spots,self.pieceType)
             #print(self.pieceType,self.color,"Piece being moved")
-##            self.calcCheckMate()
+        #if avoidCheck == "y":self.calcCheckMate(myKing,enemyKing,myTeam,enemyTeam)
+        self.myKing = myKing
+        self.enemyKing = enemyKing
+        self.myTeam = myTeam
+        self.enemyTeam = enemyTeam
         #print(self.spots,"First")
         #self.delCornerSpots()
         #self.removeOffBoardSpots()
@@ -39,17 +48,28 @@ class Piece:
     #call this after the user clicks on a square.
         #This will check if it is a valid move, and if it is it
         #will return True and will move the pieces accordingly.
-    def movePiece(self,xy,enemyPieces):   
+    def movePiece(self,xy,enemyPieces):
         self.location = Point(xy[0],xy[1])
+        print(self.pieceType,"moved to",self.location)
+        self.actualLocation = self.location
         #print(self.location)
         #self.imageUpdate()
         self.eatPiece(enemyPieces)
         if self.pieceType == "pawn":
             self.firstPawnMove = False
+        enemyPieces[0].getPossibleMoves(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam,"y")
+        print(enemyPieces[0].getCheck(),"check")
+        if enemyPieces[0].getCheck():
+            self.setOppCheck("t")
+            enemyPieces[0].calcCheckMate(self.enemyKing,self.myKing,self.enemyTeam,self.myTeam)
+            if enemyPieces[0].getCheckMate():
+                self.setOppCheckMate("t")
+        else:
+            self.setOppCheck("f")
+        print(self.getOppCheck(),"oppCheck")
+        print(self.getOppCheckMate(),"oppCheckmate")
         return enemyPieces
         
-            
-
 
     #This will find the possible spots for all pieces. (except for diagonal pawn capture)
     #Ex: king's parameters would be: [[1,1],[1,0]....], 1, enemyTeam
@@ -57,12 +77,15 @@ class Piece:
 #knight: 2,1],[1,2]
     #First filter
     def possibleSpots(self,listDir,numSpaces,enemyTeam,sameTeam):
+        if self.color == "white" and self.pieceType == "queen":
+            print(self.pieceType)
         self.spots = []
         validPawnMove = True #Use this to check if the pawn can go 2 spaces ahead - is there a piece in front of it?
         if self.firstPawnMove == False:
             listDir.remove(listDir[3])
         #For every direction, go i in numSpaces until you hit an enemy Piece or same team.
         for direction in listDir:
+            #print(direction,self.pieceType)
             x,y = self.location.getX(),self.location.getY()
             onAPiece = False
             if self.pieceType == "pawn":
@@ -78,23 +101,26 @@ class Piece:
                 #elif x <0 or y<0 or x>0 or y>0: break
                 #if on enemyTeam, this is the last possible square to go in this direction
                 #If it is pawn, then we check which direction it is going in
+                if self.color == "white" and self.pieceType == "queen":
+                    print(x,y)
                 for piece in enemyTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
-                        #print(75)
+                        print(75)
                         if self.pieceType == "pawn":
                             absDir = [abs(direction[0]),abs(direction[1])]
                             if absDir == [1,1]:
+                                print("here1")
                                 self.spots.append(Point(x,y))
                             elif absDir == [0,1]:
                                 validPawnMove = False
                                 #This is used to prevent checking direction [0,2]
                         else:
+                            print("here2")
                             self.spots.append(Point(x,y))
 
                         onAPiece = True
                 for piece in sameTeam:
                     if x == piece.getLocation().getX() and y == piece.getLocation().getY():
-                        #print(86)
                         onAPiece = True
 
                         
@@ -102,7 +128,7 @@ class Piece:
                     #print(90)
                     if self.pieceType == "pawn":
                         if direction[0] == 0:
-                            #print(93)
+                            #print("here3",self.pieceType)
                             self.spots.append(Point(x,y))
                     else: self.spots.append(Point(x,y))    
                         
@@ -130,7 +156,10 @@ class Piece:
             return False
 
     def isEaten(self):
+        self.location = Point(200,200)
         self.eaten = True
+
+
 
 
     #def removeOffBoardSpots(self):
@@ -158,29 +187,43 @@ class Piece:
     #for pieces - allows them to only make moves that prevent the king from going into check
     #for king - prevents him from going to squares that put himself in check.
     def avoidOwnCheck(self, myKing,enemyKing,myTeam,enemyTeam):
+        for p in myTeam:
+            p.setCheck("f")
         kingX, kingY = myKing.getLocationXY()
         removeSpots = []
-        numChecks = 0
         #myTeam.append(self) #How to make a list append the object that it is in?
         currentLocation = self.location
+        #this is used for checking for check
         self.spots.append(currentLocation)
         for spot in self.spots:
             print("avoidCheck",self.spots)
             self.location = spot
             for piece in enemyTeam:
                 listDir,numSpaces = piece.calcListDirections()
+                #print(piece.checkColor())
+                enemyX,enemyY = piece.getLocationXY()
+                #if the piece can capture an enemy piece such that it will no longer be in check, then pretend to eliminate the piece
+                #if the king still is under check, then the move is invalid. otherwise, it is valid. 
+                if enemyX == spot.getX() and enemyY == spot.getY():
+                    print(190)
+                    piece.setLocation(Point(200,200))
+                x1,y1 = piece.getLocationXY()
+                if x1 == 200:
+                    print(piece.getPieceType(),piece.checkColor(),"simulating eaten")
                 possibleEnemyMoves = piece.getPossibleMoves(enemyKing,myKing,enemyTeam,myTeam,"nocheck")
-                print(piece.checkColor())
                 for pos in possibleEnemyMoves:
                     #print(kingX,",",kingY,"king")
                     #print(pos.getX(),",",pos.getY(),"pos")
                     #print("spot",spot)
+                    #if a piece can attack the king when the sameTeam piece is moved, then not allowed
                     if (kingX == pos.getX() and kingY == pos.getY()) and (self.pieceType!="king"):
                         print("Piece",164)
+                        #if the location is the currentLocation, then the king is under check since the king is being
+                        #attacked even though no one on sameTeam has moved
                         if currentLocation == spot:
                             for p in myTeam:
-                                p.setCheck()
-                                numChecks +=1                                
+                                p.setCheck("t")
+                                print("king is under check")                             
                         else: removeSpots.append(spot) #find correct notation
                     elif self.pieceType == "king":
                         x,y = spot.getX(),spot.getY()
@@ -192,13 +235,12 @@ class Piece:
                                     removeSpots.append(spot)
                                 if currentLocation == spot:
                                     for p in myTeam:
-                                        p.setCheck()
-                                        numChecks += 1
+                                        p.setCheck("t")
+                                        print("king is under check")
+                                        
+                piece.resetLocation()        
                             
         removeSpots.append(currentLocation)
-        if numChecks == 0:
-            for p in myTeam:
-                p.noCheck()
         print(self.pieceType,removeSpots,self.spots)
         for spot in removeSpots:
             self.spots.remove(spot)
@@ -223,19 +265,34 @@ class Piece:
                     
 
 
-    def calcCheckMate(self,myKing,enemyKing,myTeam,enemyPieces):
-        for p in myTeam:
-            spots = p.getPossibleMoves(myKing,enemyKing,myTeam,enemyTeam,"y")
-            if spots == []:
-                noMoves = True
-            else:
-                noMoves = False
-                break
-        if noMoves == True:
-            for piece in myTeam:
-                piece.setCheckMate()
+    def calcCheckMate(self,myKing,enemyKing,myTeam,enemyTeam):
+        if self.spots == []:
+            print(261)
+            for p in myTeam:
+                spots = p.getPossibleMoves(myKing,enemyKing,myTeam,enemyTeam,"c")
+                if spots == []:
+                    noMoves = True
+                else:
+                    noMoves = False
+                    break
+            if noMoves == True:
+                for piece in myTeam:
+                    #print("inCheckmate")
+                    piece.setCheckMate()
             
-    
+
+    def setOppCheck(self,oppCheck):
+        if oppCheck == "t":
+            self.oppCheck = True
+        else:
+            self.oppCheck = False
+        
+    def setOppCheckMate(self,oppCheckMate):
+        if oppCheckMate == "t":
+            self.oppCheckMate = True
+        else:
+            self.oppCheckMate = False
+        
     def getEaten(self):
         return (self.eaten)
 
@@ -245,18 +302,30 @@ class Piece:
     def getLocation(self):
         return (self.location)
 
+    def setLocation(self,point):
+        self.location = point
+
+    def resetLocation(self):
+        self.location = self.actualLocation
+
     def getLocationXY(self):
         return self.location.getX(),self.location.getY()
 
-    def setCheck(self):
-        self.check = True
-
-    def noCheck(self):
-        self.check = False
+    def setCheck(self,check):
+        if check == "t":
+            self.check = True
+        else:
+            self.check = False
 
     def getCheck(self):
         return self.check
 
+    def getOppCheck(self):
+        return self.oppCheck
+
+    def getOppCheckMate(self):
+        return self.oppCheckMate
+    
     def checkPieceID(self):
         return self.ID
 
@@ -264,4 +333,4 @@ class Piece:
         self.checkmate = True
 
     def getCheckMate(self):
-        return self.checkmate
+        return (self.checkmate)
